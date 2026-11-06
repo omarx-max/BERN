@@ -1,0 +1,144 @@
+:root {
+  --fond: #e8ecf1;
+  --encre: #1b2140;
+  --brume: #4f5874;
+  --ligne: #b9c1cf;
+  --crepuscule: #5a3d8a;
+  --serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --sans: "Work Sans", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fond: #161b33;
+    --encre: #e6e9f2;
+    --brume: #a9b2cc;
+    --ligne: #3a4266;
+    --crepuscule: #b9a2e8;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--fond);
+  color: var(--encre);
+  font-family: var(--sans);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+}
+
+a { color: inherit; }
+
+:focus-visible {
+  outline: 3px solid var(--crepuscule);
+  outline-offset: 3px;
+}
+
+/* En-tête */
+.entete {
+  padding: 1.5rem 1.5rem 0;
+  max-width: 62rem;
+  margin: 0 auto;
+}
+.entete nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.75rem;
+  font-size: 0.95rem;
+}
+.entete a {
+  color: var(--brume);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+.entete a:hover { color: var(--encre); border-bottom-color: var(--crepuscule); }
+
+/* Accueil : la grande question */
+.accueil {
+  max-width: 62rem;
+  margin: 0 auto;
+  padding: 7vh 1.5rem 9vh;
+}
+.accueil h1 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(2.6rem, 9vw, 6rem);
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  margin: 0 0 2rem;
+}
+.intro {
+  max-width: 34rem;
+  margin: 0;
+  padding-left: 1.25rem;
+  border-left: 3px solid var(--crepuscule);
+  font-size: 1.2rem;
+  color: var(--brume);
+}
+
+/* Sections de texte */
+.texte {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 3.5rem 1.5rem;
+  border-top: 1px solid var(--ligne);
+}
+.texte h2 {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  line-height: 1.1;
+  margin: 0 0 1.5rem;
+}
+.texte p { margin: 0 0 1.1rem; }
+.texte ul { margin: 0 0 1rem; padding-left: 1.2rem; }
+.texte li { margin-bottom: 0.7rem; }
+.texte li::marker { color: var(--crepuscule); }
+
+/* Questions déroulantes */
+details {
+  border-top: 1px solid var(--ligne);
+  padding: 0.25rem 0;
+}
+details:last-of-type { border-bottom: 1px solid var(--ligne); }
+summary {
+  cursor: pointer;
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  font-weight: 500;
+  padding: 0.9rem 0;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+summary::-webkit-details-marker { display: none; }
+summary::after {
+  content: "+";
+  color: var(--crepuscule);
+  font-family: var(--sans);
+  font-weight: 400;
+}
+details[open] summary::after { content: "−"; }
+details p { color: var(--brume); padding-bottom: 0.9rem; margin: 0; }
+
+/* Pied de page */
+.pied {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem;
+  border-top: 1px solid var(--ligne);
+  color: var(--brume);
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.15rem;
+}
+.pied p { margin: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
