@@ -1,85 +1,314 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Qui sommes-nous quand nous pensons ?</title>
-  <meta name="description" content="Un essai de réponses aux questions existentielles, pour comprendre la conscience et ce que nous sommes.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Work+Sans:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Qui sommes-nous quand nous pensons ?</title>
+<meta name="description" content="Un essai de réponses aux questions existentielles, pour comprendre la conscience et ce que nous sommes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Sora:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b1020;--bg2:#141a33;--txt:#e9ecf8;--mut:#a3accb;--v:#7c3aed;--c:#22d3ee;--p:#f472b6;--a:#fbbf24;--g:#34d399;
+--t:"Sora",system-ui,sans-serif;--b:"Inter",system-ui,sans-serif}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--txt);font:400 1.05rem/1.7 var(--b);overflow-x:hidden}
+canvas#fond{position:fixed;inset:0;z-index:0;pointer-events:none}
+.halo{position:fixed;z-index:0;border-radius:50%;filter:blur(110px);opacity:.35;pointer-events:none}
+.h1{width:420px;height:420px;background:var(--v);top:-120px;left:-100px}
+.h2{width:380px;height:380px;background:var(--c);bottom:-120px;right:-80px;opacity:.22}
+.h3{width:300px;height:300px;background:var(--p);top:45%;left:55%;opacity:.14}
+header,main,footer{position:relative;z-index:1}
+:focus-visible{outline:3px solid var(--c);outline-offset:3px}
+
+/* Navigation en onglets */
+header{position:sticky;top:0;z-index:10;background:rgba(11,16,32,.75);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.08)}
+.barre{max-width:72rem;margin:0 auto;padding:.7rem 1rem;display:flex;align-items:center;gap:1rem}
+.logo{font:800 1.15rem var(--t);background:linear-gradient(90deg,var(--c),var(--p));-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
+[role=tablist]{display:flex;gap:.4rem;overflow-x:auto;scrollbar-width:none;flex:1}
+[role=tablist]::-webkit-scrollbar{display:none}
+[role=tab]{font:500 .92rem var(--b);color:var(--mut);background:transparent;border:1px solid transparent;border-radius:999px;padding:.5rem 1rem;cursor:pointer;white-space:nowrap;transition:.25s}
+[role=tab]:hover{color:var(--txt);background:rgba(255,255,255,.06)}
+[role=tab][aria-selected=true]{color:#fff;background:linear-gradient(135deg,var(--v),var(--c));box-shadow:0 6px 24px rgba(124,58,237,.45)}
+
+main{max-width:72rem;margin:0 auto;padding:0 1.2rem 4rem}
+.panel[hidden]{display:none}
+.panel{animation:entree .6s ease both}
+@keyframes entree{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* Accueil */
+.hero{display:grid;grid-template-columns:1.2fr .8fr;gap:2rem;align-items:center;min-height:78vh;padding:3rem 0}
+.hero h1{font:800 clamp(2.4rem,6.5vw,4.6rem)/1.05 var(--t);margin:0 0 1.2rem;letter-spacing:-.02em}
+.grad{background:linear-gradient(90deg,var(--v),var(--c),var(--p),var(--a),var(--v));background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 9s linear infinite}
+@keyframes flow{to{background-position:300% 0}}
+.intro{font-size:1.2rem;color:var(--mut);max-width:34rem;margin:0 0 1.2rem}
+.frappe{font:500 1.15rem var(--t);color:var(--c);min-height:2.2em;margin:0 0 1.6rem}
+.frappe::after{content:"|";animation:clign 1s steps(1) infinite;margin-left:2px}
+@keyframes clign{50%{opacity:0}}
+.boutons{display:flex;flex-wrap:wrap;gap:.8rem}
+.btn{font:700 1rem var(--t);border:0;border-radius:14px;padding:.9rem 1.5rem;cursor:pointer;color:#fff;transition:.25s}
+.btn.plein{background:linear-gradient(135deg,var(--v),var(--p));box-shadow:0 10px 30px rgba(244,114,182,.35)}
+.btn.vide{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.18)}
+.btn:hover{transform:translateY(-3px)}
+.orbe{width:100%;max-width:380px;margin:auto;display:block;filter:drop-shadow(0 0 40px rgba(124,58,237,.6))}
+.orbe .r{fill:none;stroke-width:1.6;transform-box:fill-box;transform-origin:center;animation:pulse 4s ease-in-out infinite}
+.orbe .r2{animation-delay:-1.3s}.orbe .r3{animation-delay:-2.6s}
+.orbe .noyau{transform-box:fill-box;transform-origin:center;animation:respire 5s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(.9);opacity:.35}50%{transform:scale(1.06);opacity:1}}
+@keyframes respire{50%{transform:scale(1.08)}}
+
+/* Titres et cartes */
+h2{font:800 clamp(1.9rem,4.5vw,3rem)/1.1 var(--t);margin:2.5rem 0 .8rem;letter-spacing:-.01em}
+.sous{color:var(--mut);max-width:40rem;margin:0 0 2rem}
+.grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:1.2rem}
+.carte{--k:var(--v);position:relative;background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);border-top:4px solid var(--k);border-radius:20px;padding:1.5rem;
+transform:perspective(800px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .2s,box-shadow .3s}
+.carte:hover{box-shadow:0 18px 50px -12px var(--k)}
+.carte h3{font:700 1.25rem var(--t);margin:0 0 .5rem;color:var(--k)}
+.carte p{margin:0;color:var(--mut);font-size:1rem}
+.k1{--k:var(--v)}.k2{--k:var(--c)}.k3{--k:var(--p)}.k4{--k:var(--a)}
+.ico{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:1.5rem;margin-bottom:1rem;background:color-mix(in srgb,var(--k) 22%,transparent)}
+.avatar{width:72px;height:72px;border-radius:50%;display:grid;place-items:center;font:800 1.9rem var(--t);color:#fff;margin-bottom:1rem;background:linear-gradient(135deg,var(--k),var(--bg2));box-shadow:0 0 0 4px rgba(255,255,255,.08),0 0 30px -4px var(--k)}
+.date{font-size:.85rem;color:var(--k);font-weight:500;margin-bottom:.4rem}
+
+.citation{margin:2rem 0;padding:1.6rem 1.8rem;border-radius:20px;background:linear-gradient(120deg,rgba(124,58,237,.25),rgba(34,211,238,.15));border:1px solid rgba(255,255,255,.12);font:500 clamp(1.15rem,2.6vw,1.6rem)/1.45 var(--t)}
+.citation small{display:block;margin-top:.7rem;font:400 .9rem var(--b);color:var(--mut)}
+.texte{max-width:46rem}
+.texte p{margin:0 0 1.1rem}
+
+/* Vidéo */
+.video{position:relative;aspect-ratio:16/9;border-radius:22px;overflow:hidden;border:1px solid rgba(255,255,255,.14);box-shadow:0 0 0 6px rgba(124,58,237,.18),0 30px 70px -20px rgba(124,58,237,.7);background:#000;max-width:56rem}
+.video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.legende{color:var(--mut);max-width:56rem;margin:1.2rem 0 0}
+.legende a{color:var(--c)}
+
+/* Questions */
+details{max-width:50rem;margin-bottom:.8rem;border-radius:16px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);overflow:hidden;transition:.3s}
+details[open]{border-color:var(--p);background:rgba(244,114,182,.07)}
+summary{cursor:pointer;list-style:none;padding:1.1rem 1.3rem;font:700 1.15rem var(--t);display:flex;justify-content:space-between;gap:1rem}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--p);font-size:1.5rem;line-height:1;transition:transform .3s}
+details[open] summary::after{transform:rotate(45deg)}
+details p{margin:0;padding:0 1.3rem 1.2rem;color:var(--mut)}
+
+footer{text-align:center;padding:2.5rem 1rem 3rem;color:var(--mut);border-top:1px solid rgba(255,255,255,.08)}
+
+.rv{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s}
+.rv.in{opacity:1;transform:none}
+
+@media(max-width:760px){.hero{grid-template-columns:1fr;min-height:auto}.orbe{max-width:240px;order:-1}.logo{display:none}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}html{scroll-behavior:auto}}
+</style>
 </head>
 <body>
+<canvas id="fond" aria-hidden="true"></canvas>
+<div class="halo h1"></div><div class="halo h2"></div><div class="halo h3"></div>
 
-<header class="entete">
-  <nav aria-label="Navigation principale">
-    <a href="#conscience">La conscience</a>
-    <a href="#philosophie">La philosophie</a>
-    <a href="#questions">Les grandes questions</a>
-  </nav>
+<header>
+  <div class="barre">
+    <span class="logo">Conscience</span>
+    <div role="tablist" aria-label="Sections du site">
+      <button role="tab" data-tab="accueil" aria-selected="true">Accueil</button>
+      <button role="tab" data-tab="conscience" aria-selected="false" tabindex="-1">La conscience</button>
+      <button role="tab" data-tab="philosophie" aria-selected="false" tabindex="-1">La philosophie</button>
+      <button role="tab" data-tab="penseurs" aria-selected="false" tabindex="-1">Les penseurs</button>
+      <button role="tab" data-tab="video" aria-selected="false" tabindex="-1">Vidéo</button>
+      <button role="tab" data-tab="questions" aria-selected="false" tabindex="-1">Questions</button>
+    </div>
+  </div>
 </header>
 
 <main>
-  <section class="accueil">
-    <h1>Qui sommes-nous<br>quand nous pensons&nbsp;?</h1>
-    <p class="intro">Un essai de réponses aux questions existentielles, pour comprendre la conscience et ce que nous sommes.</p>
-  </section>
 
-  <section id="conscience" class="texte">
-    <h2>La conscience</h2>
-    <p>Être conscient, c’est savoir qu’on est là. Quand je regarde un coucher de soleil, il se passe quelque chose de plus que de la lumière sur ma rétine : je vis cette scène, de l’intérieur. Les philosophes appellent cela l’expérience subjective.</p>
-    <p>En 1637, Descartes pose une première pierre : même si je doute de tout, je ne peux pas douter que je doute. «&nbsp;Je pense, donc je suis&nbsp;» fait de la pensée le point de départ de toute certitude.</p>
-    <p>Aujourd’hui, la question reste ouverte. Pour les matérialistes, la conscience naît du cerveau, comme la musique naît d’un instrument. Pour les dualistes, l’esprit est d’une autre nature que la matière. Pour d’autres encore, la pensée serait une lumière commune, et chaque esprit n’en recevrait qu’une part.</p>
-    <p>En 1995, le philosophe David Chalmers a nommé le «&nbsp;problème difficile&nbsp;» : expliquer pourquoi les processus du cerveau s’accompagnent d’une expérience vécue, et pas seulement comment ils fonctionnent.</p>
-  </section>
+<!-- ACCUEIL -->
+<section class="panel" id="accueil" role="tabpanel">
+  <div class="hero">
+    <div>
+      <h1>Qui sommes-nous<br>quand <span class="grad">nous pensons&nbsp;?</span></h1>
+      <p class="intro">Un essai de réponses aux questions existentielles, pour comprendre la conscience et ce que nous sommes.</p>
+      <p class="frappe" id="frappe" aria-live="off"></p>
+      <div class="boutons">
+        <button class="btn plein" data-go="conscience">Explorer la conscience</button>
+        <button class="btn vide" data-go="video">Voir la vidéo</button>
+      </div>
+    </div>
+    <svg class="orbe" viewBox="0 0 300 300" aria-hidden="true">
+      <defs><radialGradient id="g" cx="50%" cy="42%" r="62%"><stop offset="0" stop-color="#fff"/><stop offset=".22" stop-color="#22d3ee"/><stop offset=".6" stop-color="#7c3aed"/><stop offset="1" stop-color="#0b1020"/></radialGradient></defs>
+      <circle class="r r1" cx="150" cy="150" r="140" stroke="#7c3aed"/>
+      <circle class="r r2" cx="150" cy="150" r="112" stroke="#22d3ee"/>
+      <circle class="r r3" cx="150" cy="150" r="84" stroke="#f472b6"/>
+      <circle class="noyau" cx="150" cy="150" r="54" fill="url(#g)"/>
+    </svg>
+  </div>
+  <div class="grille">
+    <div class="carte k1 rv"><div class="ico">🧠</div><h3>La conscience</h3><p>Pourquoi vivons-nous nos expériences de l’intérieur&nbsp;?</p></div>
+    <div class="carte k2 rv"><div class="ico">📚</div><h3>La philosophie</h3><p>Quatre territoires pour penser le monde, la vérité et la vie bonne.</p></div>
+    <div class="carte k3 rv"><div class="ico">🎬</div><h3>Une conférence</h3><p>Un philosophe explique le « problème difficile » en moins de vingt minutes.</p></div>
+  </div>
+</section>
 
-  <section id="philosophie" class="texte">
-    <h2>La philosophie</h2>
-    <p>Le mot vient du grec et signifie «&nbsp;amour de la sagesse&nbsp;». Philosopher, c’est poser des questions simples en refusant les réponses toutes faites, et justifier chaque réponse par des raisons.</p>
-    <p>Elle explore quatre grands territoires :</p>
-    <ul>
-      <li><strong>La métaphysique</strong> cherche ce qui existe vraiment : l’esprit, le temps, le libre arbitre.</li>
-      <li><strong>La théorie de la connaissance</strong> demande ce que nous pouvons savoir, et comment.</li>
-      <li><strong>L’éthique</strong> s’interroge sur ce qui est juste et sur la manière de bien vivre.</li>
-      <li><strong>La politique</strong> réfléchit à la façon de vivre ensemble.</li>
-    </ul>
-  </section>
+<!-- CONSCIENCE -->
+<section class="panel" id="conscience" role="tabpanel" hidden>
+  <h2>La <span class="grad">conscience</span></h2>
+  <p class="sous">Être conscient, c’est savoir qu’on est là, et vivre ce que l’on perçoit.</p>
+  <div class="texte rv">
+    <p>Quand je regarde un coucher de soleil, il se passe plus que de la lumière sur ma rétine : je vis cette scène, de l’intérieur. Les philosophes appellent cela l’expérience subjective.</p>
+    <p>En 1637, Descartes pose une première pierre : même si je doute de tout, je ne peux pas douter que je doute. La pensée devient le point de départ de toute certitude.</p>
+  </div>
+  <div class="citation rv">« Je pense, donc je suis. »<small>René Descartes, Discours de la méthode (1637)</small></div>
+  <div class="texte rv"><p>En 1995, le philosophe David Chalmers a nommé le « problème difficile » : expliquer pourquoi les processus du cerveau s’accompagnent d’une expérience vécue, et pas seulement comment ils fonctionnent. Trois grandes réponses s’affrontent.</p></div>
+  <div class="grille">
+    <div class="carte k1 rv"><div class="ico">⚙️</div><h3>Le matérialisme</h3><p>La conscience naît de l’activité du cerveau, comme la musique naît d’un instrument.</p></div>
+    <div class="carte k2 rv"><div class="ico">✨</div><h3>Le dualisme</h3><p>L’esprit est d’une autre nature que la matière. C’est la piste ouverte par Descartes.</p></div>
+    <div class="carte k3 rv"><div class="ico">🌌</div><h3>Le panpsychisme</h3><p>La conscience serait une propriété fondamentale de l’univers, comme l’espace ou le temps.</p></div>
+  </div>
+</section>
 
-  <section id="questions" class="texte">
-    <h2>Les grandes questions</h2>
-    <p>Voici quelques tentatives de réponse. Touche une question pour lire la réponse.</p>
+<!-- PHILOSOPHIE -->
+<section class="panel" id="philosophie" role="tabpanel" hidden>
+  <h2>La <span class="grad">philosophie</span></h2>
+  <p class="sous">Le mot vient du grec et signifie « amour de la sagesse ». Philosopher, c’est poser des questions simples, refuser les réponses toutes faites et justifier chaque réponse par des raisons.</p>
+  <div class="grille">
+    <div class="carte k1 rv"><div class="ico">🔭</div><h3>La métaphysique</h3><p>Ce qui existe vraiment : l’esprit, le temps, le libre arbitre.</p></div>
+    <div class="carte k2 rv"><div class="ico">💡</div><h3>La connaissance</h3><p>Ce que nous pouvons savoir, et comment nous pouvons en être sûrs.</p></div>
+    <div class="carte k3 rv"><div class="ico">⚖️</div><h3>L’éthique</h3><p>Ce qui est juste, et la manière de bien vivre.</p></div>
+    <div class="carte k4 rv"><div class="ico">🏛️</div><h3>La politique</h3><p>La meilleure façon de vivre ensemble.</p></div>
+  </div>
+</section>
 
-    <details>
-      <summary>Qui suis-je&nbsp;?</summary>
-      <p>Je suis à la fois un corps, une mémoire et un regard. Mon corps change, mes souvenirs se transforment, et pourtant je me sens le même. Peut-être que je suis moins une chose fixe qu’une histoire que je continue d’écrire, avec les autres.</p>
-    </details>
+<!-- PENSEURS -->
+<section class="panel" id="penseurs" role="tabpanel" hidden>
+  <h2>Les <span class="grad">penseurs</span></h2>
+  <p class="sous">Quatre voix qui ont changé notre façon de penser.</p>
+  <div class="grille">
+    <div class="carte k4 rv"><div class="avatar">S</div><div class="date">470 – 399 av. J.-C.</div><h3>Socrate</h3><p>Il interroge sans cesse pour faire naître la vérité. On lui prête la phrase « Je sais que je ne sais rien ».</p></div>
+    <div class="carte k2 rv"><div class="avatar">D</div><div class="date">1596 – 1650</div><h3>Descartes</h3><p>Il fait du doute une méthode et de la pensée la première certitude.</p></div>
+    <div class="carte k3 rv"><div class="avatar">K</div><div class="date">1724 – 1804</div><h3>Kant</h3><p>Il résume la philosophie en trois questions : que puis-je savoir, que dois-je faire, que m’est-il permis d’espérer&nbsp;?</p></div>
+    <div class="carte k1 rv"><div class="avatar">C</div><div class="date">né en 1966</div><h3>David Chalmers</h3><p>Il a formulé le « problème difficile » de la conscience, au cœur du débat actuel.</p></div>
+  </div>
+</section>
 
-    <details>
-      <summary>Pourquoi existons-nous&nbsp;?</summary>
-      <p>Aucune preuve ne donne un but à l’existence. Mais nous pouvons lui en donner un : aimer, comprendre, créer, aider. Le sens n’est peut-être pas une découverte à faire, mais une œuvre à construire.</p>
-    </details>
+<!-- VIDÉO -->
+<section class="panel" id="video" role="tabpanel" hidden>
+  <h2>La <span class="grad">conférence</span></h2>
+  <p class="sous">Pour aller plus loin, une conférence TED où David Chalmers présente le problème difficile de la conscience.</p>
+  <div class="video"><iframe id="lecteur" data-src="https://www.youtube-nocookie.com/embed/uhRhtFFhNzQ" title="David Chalmers : How do you explain consciousness ?" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+  <p class="legende">« How do you explain consciousness? », par David Chalmers (TED, environ 18 minutes, en anglais). Active les sous-titres dans le lecteur si besoin. <a href="https://www.youtube.com/watch?v=uhRhtFFhNzQ" target="_blank" rel="noopener">Ouvrir sur YouTube</a>.</p>
+</section>
 
-    <details>
-      <summary>Sommes-nous vraiment libres&nbsp;?</summary>
-      <p>Nos choix naissent de notre histoire, de notre corps, de notre époque. Pourtant, nous pouvons réfléchir à nos désirs avant d’agir. Cette distance entre l’impulsion et le geste est sans doute là où commence la liberté.</p>
-    </details>
+<!-- QUESTIONS -->
+<section class="panel" id="questions" role="tabpanel" hidden>
+  <h2>Les grandes <span class="grad">questions</span></h2>
+  <p class="sous">Quelques tentatives de réponse. Touche une question pour lire la réponse.</p>
+  <details><summary>Qui suis-je ?</summary><p>Je suis à la fois un corps, une mémoire et un regard. Mon corps change, mes souvenirs se transforment, et pourtant je me sens le même. Peut-être que je suis moins une chose fixe qu’une histoire que je continue d’écrire, avec les autres.</p></details>
+  <details><summary>Pourquoi existons-nous ?</summary><p>Aucune preuve ne donne un but à l’existence. Mais nous pouvons lui en donner un : aimer, comprendre, créer, aider. Le sens n’est peut-être pas une découverte à faire, mais une œuvre à construire.</p></details>
+  <details><summary>Sommes-nous vraiment libres ?</summary><p>Nos choix naissent de notre histoire, de notre corps, de notre époque. Pourtant, nous pouvons réfléchir à nos désirs avant d’agir. Cette distance entre l’impulsion et le geste est sans doute là où commence la liberté.</p></details>
+  <details><summary>Que devient la conscience après la mort ?</summary><p>Personne ne peut le prouver. Si la conscience dépend du cerveau, elle s’éteint avec lui. Si elle le dépasse, elle continue sous une autre forme. Face à ce doute, la sagesse est d’accueillir la question sans s’en laisser paralyser.</p></details>
+  <details><summary>Qu’est-ce qu’une vie réussie ?</summary><p>Ni la richesse ni la gloire ne suffisent. Beaucoup de penseurs la décrivent comme une vie qui a du sens pour celui qui la vit : des liens sincères, un travail qui compte, et la liberté de continuer à apprendre.</p></details>
+</section>
 
-    <details>
-      <summary>Que devient la conscience après la mort&nbsp;?</summary>
-      <p>Personne ne peut le prouver. Si la conscience dépend du cerveau, elle s’éteint avec lui. Si elle le dépasse, elle continue sous une autre forme. Face à ce doute, la sagesse est d’accueillir la question sans s’en laisser paralyser.</p>
-    </details>
-
-    <details>
-      <summary>Qu’est-ce qu’une vie réussie&nbsp;?</summary>
-      <p>Ni la richesse ni la gloire ne suffisent. Beaucoup de penseurs la décrivent comme une vie qui a du sens pour celui qui la vit : des liens sincères, un travail qui compte, et la liberté de continuer à apprendre.</p>
-    </details>
-  </section>
 </main>
 
-<footer class="pied">
-  <p>Un essai ouvert, écrit avec humilité et curiosité.</p>
-</footer>
+<footer>Un essai ouvert, écrit avec humilité et curiosité.</footer>
 
+<script>
+(function(){
+  var reduit = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var onglets = [].slice.call(document.querySelectorAll('[role=tab]'));
+  var panneaux = [].slice.call(document.querySelectorAll('.panel'));
+  var ids = onglets.map(function(t){return t.dataset.tab;});
+
+  /* Apparition au défilement */
+  var obs = 'IntersectionObserver' in window ? new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target);} });
+  },{threshold:.15}) : null;
+  function revele(){
+    document.querySelectorAll('.panel:not([hidden]) .rv:not(.in)').forEach(function(el){
+      if(obs){ obs.observe(el); } else { el.classList.add('in'); }
+    });
+  }
+
+  /* Changement d'onglet */
+  function afficher(id, maj){
+    if(ids.indexOf(id) < 0) id = 'accueil';
+    onglets.forEach(function(t){
+      var on = t.dataset.tab === id;
+      t.setAttribute('aria-selected', on); t.tabIndex = on ? 0 : -1;
+      if(on) t.scrollIntoView({inline:'center', block:'nearest'});
+    });
+    panneaux.forEach(function(p){ p.hidden = p.id !== id; });
+    var f = document.getElementById('lecteur');
+    if(id === 'video' && !f.src) f.src = f.dataset.src;
+    if(maj !== false) history.replaceState(null, '', '#' + id);
+    window.scrollTo(0, 0);
+    revele();
+  }
+  onglets.forEach(function(t, i){
+    t.addEventListener('click', function(){ afficher(t.dataset.tab); });
+    t.addEventListener('keydown', function(e){
+      var n = e.key === 'ArrowRight' ? i + 1 : e.key === 'ArrowLeft' ? i - 1 : null;
+      if(n === null) return;
+      n = (n + onglets.length) % onglets.length; onglets[n].focus(); afficher(ids[n]);
+    });
+  });
+  document.querySelectorAll('[data-go]').forEach(function(b){
+    b.addEventListener('click', function(){ afficher(b.dataset.go); });
+  });
+  window.addEventListener('hashchange', function(){ afficher(location.hash.slice(1), false); });
+  afficher(location.hash.slice(1) || 'accueil', false);
+
+  /* Inclinaison 3D des cartes */
+  document.querySelectorAll('.carte').forEach(function(c){
+    c.addEventListener('mousemove', function(e){
+      if(reduit) return;
+      var r = c.getBoundingClientRect();
+      c.style.setProperty('--ry', ((e.clientX - r.left)/r.width - .5) * 10 + 'deg');
+      c.style.setProperty('--rx', (.5 - (e.clientY - r.top)/r.height) * 10 + 'deg');
+    });
+    c.addEventListener('mouseleave', function(){ c.style.setProperty('--rx','0deg'); c.style.setProperty('--ry','0deg'); });
+  });
+
+  /* Phrases qui s'écrivent */
+  var phrases = ['Que signifie être conscient ?','Pourquoi existons-nous ?','Sommes-nous vraiment libres ?','Que reste-t-il après la mort ?'];
+  var el = document.getElementById('frappe');
+  if(reduit){ el.textContent = phrases[0]; }
+  else {
+    var p = 0, i = 0, sens = 1;
+    (function tour(){
+      var mot = phrases[p];
+      i += sens; el.textContent = mot.slice(0, i);
+      var d = 60;
+      if(sens === 1 && i === mot.length){ sens = -1; d = 1800; }
+      else if(sens === -1 && i === 0){ sens = 1; p = (p + 1) % phrases.length; d = 400; }
+      else if(sens === -1){ d = 25; }
+      setTimeout(tour, d);
+    })();
+  }
+
+  /* Fond animé : réseau de particules colorées */
+  var cv = document.getElementById('fond'), cx = cv.getContext('2d'), W, H, pts = [];
+  var couleurs = ['124,58,237','34,211,238','244,114,182','251,191,36'];
+  function taille(){
+    W = cv.width = innerWidth; H = cv.height = innerHeight;
+    var n = Math.min(70, Math.floor(W * H / 20000)); pts = [];
+    for(var k = 0; k < n; k++) pts.push({x:Math.random()*W, y:Math.random()*H, vx:(Math.random()-.5)*.35, vy:(Math.random()-.5)*.35, c:couleurs[k % 4], r:1.2 + Math.random()*1.8});
+  }
+  function dessine(){
+    cx.clearRect(0, 0, W, H);
+    for(var a = 0; a < pts.length; a++){
+      var A = pts[a];
+      if(!reduit){ A.x += A.vx; A.y += A.vy; if(A.x < 0 || A.x > W) A.vx *= -1; if(A.y < 0 || A.y > H) A.vy *= -1; }
+      cx.beginPath(); cx.arc(A.x, A.y, A.r, 0, 6.283); cx.fillStyle = 'rgba(' + A.c + ',.9)'; cx.fill();
+      for(var b = a + 1; b < pts.length; b++){
+        var B = pts[b], dx = A.x - B.x, dy = A.y - B.y, d = dx*dx + dy*dy;
+        if(d < 14000){ cx.strokeStyle = 'rgba(' + A.c + ',' + (1 - d/14000) * .35 + ')'; cx.lineWidth = .8; cx.beginPath(); cx.moveTo(A.x, A.y); cx.lineTo(B.x, B.y); cx.stroke(); }
+      }
+    }
+    if(!reduit) requestAnimationFrame(dessine);
+  }
+  addEventListener('resize', taille); taille(); dessine();
+})();
+</script>
 </body>
 </html>
