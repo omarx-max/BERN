@@ -3,311 +3,284 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Qui sommes-nous quand nous pensons ?</title>
-<meta name="description" content="Un essai de réponses aux questions existentielles, pour comprendre la conscience et ce que nous sommes.">
+<title>Questions philosophiques</title>
+<meta name="description" content="Choisis un thème, ouvre un dossier et réponds librement à des questions philosophiques.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Sora:wght@500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0b1020;--bg2:#141a33;--txt:#e9ecf8;--mut:#a3accb;--v:#7c3aed;--c:#22d3ee;--p:#f472b6;--a:#fbbf24;--g:#34d399;
---t:"Sora",system-ui,sans-serif;--b:"Inter",system-ui,sans-serif}
+:root{--noir:#000;--carte:#0b0b0b;--ligne:#222;--txt:#f3f3f3;--mut:#9a9a9a;--acc:#b8a6ff;
+--serif:"Cormorant Garamond",Georgia,serif;--sans:"Inter",system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--txt);font:400 1.05rem/1.7 var(--b);overflow-x:hidden}
-canvas#fond{position:fixed;inset:0;z-index:0;pointer-events:none}
-.halo{position:fixed;z-index:0;border-radius:50%;filter:blur(110px);opacity:.35;pointer-events:none}
-.h1{width:420px;height:420px;background:var(--v);top:-120px;left:-100px}
-.h2{width:380px;height:380px;background:var(--c);bottom:-120px;right:-80px;opacity:.22}
-.h3{width:300px;height:300px;background:var(--p);top:45%;left:55%;opacity:.14}
-header,main,footer{position:relative;z-index:1}
-:focus-visible{outline:3px solid var(--c);outline-offset:3px}
+body{margin:0;background:var(--noir);color:var(--txt);font:400 1.05rem/1.7 var(--sans);min-height:100vh}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
 
-/* Navigation en onglets */
-header{position:sticky;top:0;z-index:10;background:rgba(11,16,32,.75);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.08)}
-.barre{max-width:72rem;margin:0 auto;padding:.7rem 1rem;display:flex;align-items:center;gap:1rem}
-.logo{font:800 1.15rem var(--t);background:linear-gradient(90deg,var(--c),var(--p));-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
-[role=tablist]{display:flex;gap:.4rem;overflow-x:auto;scrollbar-width:none;flex:1}
-[role=tablist]::-webkit-scrollbar{display:none}
-[role=tab]{font:500 .92rem var(--b);color:var(--mut);background:transparent;border:1px solid transparent;border-radius:999px;padding:.5rem 1rem;cursor:pointer;white-space:nowrap;transition:.25s}
-[role=tab]:hover{color:var(--txt);background:rgba(255,255,255,.06)}
-[role=tab][aria-selected=true]{color:#fff;background:linear-gradient(135deg,var(--v),var(--c));box-shadow:0 6px 24px rgba(124,58,237,.45)}
+/* Bouton menu en haut à gauche */
+.btn-menu{position:fixed;top:1rem;left:1rem;z-index:40;display:flex;align-items:center;gap:.6rem;
+background:#0b0b0b;color:var(--txt);border:1px solid #333;border-radius:12px;padding:.65rem 1rem;
+font:600 .95rem var(--sans);cursor:pointer;transition:.25s}
+.btn-menu:hover{border-color:var(--acc);box-shadow:0 0 24px -6px var(--acc)}
+.btn-menu .barres{display:grid;gap:4px}
+.btn-menu .barres i{display:block;width:18px;height:2px;background:currentColor;border-radius:2px}
 
-main{max-width:72rem;margin:0 auto;padding:0 1.2rem 4rem}
-.panel[hidden]{display:none}
-.panel{animation:entree .6s ease both}
-@keyframes entree{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+/* Tiroir de navigation */
+.voile{position:fixed;inset:0;background:rgba(0,0,0,.7);opacity:0;visibility:hidden;transition:.3s;z-index:45}
+.tiroir{position:fixed;top:0;left:0;bottom:0;width:min(23rem,88vw);background:#050505;border-right:1px solid var(--ligne);
+transform:translateX(-100%);visibility:hidden;transition:transform .3s,visibility .3s;z-index:50;overflow-y:auto;padding:1.2rem 1.2rem 3rem}
+.ouvert .tiroir{transform:none;visibility:visible}
+.ouvert .voile{opacity:1;visibility:visible}
+.tiroir-haut{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.4rem}
+.tiroir-haut strong{font:600 1.5rem var(--serif)}
+.fermer{background:none;border:1px solid #333;color:var(--txt);border-radius:10px;width:38px;height:38px;font-size:1.2rem;cursor:pointer}
+.tiroir a.accueil{display:block;padding:.7rem .8rem;border-radius:10px;text-decoration:none;color:var(--mut);margin-bottom:.6rem}
+.tiroir a.accueil:hover{color:var(--txt);background:#111}
+.tiroir details{border-top:1px solid var(--ligne);padding:.3rem 0}
+.tiroir summary{cursor:pointer;list-style:none;padding:.8rem .8rem;font:600 1.25rem var(--serif);display:flex;justify-content:space-between;gap:1rem}
+.tiroir summary::-webkit-details-marker{display:none}
+.tiroir summary::after{content:"+";color:var(--acc);font-family:var(--sans)}
+.tiroir details[open] summary::after{content:"−"}
+.tiroir details a{display:block;margin:.15rem 0 .15rem .8rem;padding:.55rem .9rem;border-left:2px solid #2a2a2a;color:var(--mut);text-decoration:none;font-size:.97rem}
+.tiroir details a:hover{color:var(--txt);border-left-color:var(--acc);background:#0d0d0d}
 
-/* Accueil */
-.hero{display:grid;grid-template-columns:1.2fr .8fr;gap:2rem;align-items:center;min-height:78vh;padding:3rem 0}
-.hero h1{font:800 clamp(2.4rem,6.5vw,4.6rem)/1.05 var(--t);margin:0 0 1.2rem;letter-spacing:-.02em}
-.grad{background:linear-gradient(90deg,var(--v),var(--c),var(--p),var(--a),var(--v));background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 9s linear infinite}
-@keyframes flow{to{background-position:300% 0}}
-.intro{font-size:1.2rem;color:var(--mut);max-width:34rem;margin:0 0 1.2rem}
-.frappe{font:500 1.15rem var(--t);color:var(--c);min-height:2.2em;margin:0 0 1.6rem}
-.frappe::after{content:"|";animation:clign 1s steps(1) infinite;margin-left:2px}
-@keyframes clign{50%{opacity:0}}
-.boutons{display:flex;flex-wrap:wrap;gap:.8rem}
-.btn{font:700 1rem var(--t);border:0;border-radius:14px;padding:.9rem 1.5rem;cursor:pointer;color:#fff;transition:.25s}
-.btn.plein{background:linear-gradient(135deg,var(--v),var(--p));box-shadow:0 10px 30px rgba(244,114,182,.35)}
-.btn.vide{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.18)}
-.btn:hover{transform:translateY(-3px)}
-.orbe{width:100%;max-width:380px;margin:auto;display:block;filter:drop-shadow(0 0 40px rgba(124,58,237,.6))}
-.orbe .r{fill:none;stroke-width:1.6;transform-box:fill-box;transform-origin:center;animation:pulse 4s ease-in-out infinite}
-.orbe .r2{animation-delay:-1.3s}.orbe .r3{animation-delay:-2.6s}
-.orbe .noyau{transform-box:fill-box;transform-origin:center;animation:respire 5s ease-in-out infinite}
-@keyframes pulse{0%,100%{transform:scale(.9);opacity:.35}50%{transform:scale(1.06);opacity:1}}
-@keyframes respire{50%{transform:scale(1.08)}}
+/* Scène principale */
+main{max-width:62rem;margin:0 auto;padding:5.5rem 1.4rem 4rem}
+.fil{font-size:.9rem;color:var(--mut);margin-bottom:1.6rem}
+.fil a{color:var(--mut);text-decoration:none}
+.fil a:hover{color:var(--txt)}
+.fil span{margin:0 .4rem;opacity:.5}
+h1{font:600 clamp(2.4rem,7vw,4.4rem)/1.05 var(--serif);margin:0 0 1rem;letter-spacing:-.01em}
+h1.q{font-size:clamp(1.9rem,5vw,3rem);line-height:1.15}
+.intro{color:var(--mut);max-width:38rem;margin:0 0 2.4rem;font-size:1.12rem}
+.etiquette{display:inline-block;font:500 .8rem var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--acc);margin-bottom:.8rem}
+.vue{animation:entree .45s ease both}
+@keyframes entree{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 
-/* Titres et cartes */
-h2{font:800 clamp(1.9rem,4.5vw,3rem)/1.1 var(--t);margin:2.5rem 0 .8rem;letter-spacing:-.01em}
-.sous{color:var(--mut);max-width:40rem;margin:0 0 2rem}
-.grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:1.2rem}
-.carte{--k:var(--v);position:relative;background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);border-top:4px solid var(--k);border-radius:20px;padding:1.5rem;
-transform:perspective(800px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .2s,box-shadow .3s}
-.carte:hover{box-shadow:0 18px 50px -12px var(--k)}
-.carte h3{font:700 1.25rem var(--t);margin:0 0 .5rem;color:var(--k)}
-.carte p{margin:0;color:var(--mut);font-size:1rem}
-.k1{--k:var(--v)}.k2{--k:var(--c)}.k3{--k:var(--p)}.k4{--k:var(--a)}
-.ico{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:1.5rem;margin-bottom:1rem;background:color-mix(in srgb,var(--k) 22%,transparent)}
-.avatar{width:72px;height:72px;border-radius:50%;display:grid;place-items:center;font:800 1.9rem var(--t);color:#fff;margin-bottom:1rem;background:linear-gradient(135deg,var(--k),var(--bg2));box-shadow:0 0 0 4px rgba(255,255,255,.08),0 0 30px -4px var(--k)}
-.date{font-size:.85rem;color:var(--k);font-weight:500;margin-bottom:.4rem}
+/* Dossiers */
+.grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(16rem,1fr));gap:1.8rem 1.4rem}
+.dossier{position:relative;display:block;margin-top:14px;padding:1.5rem 1.4rem 1.4rem;background:var(--carte);
+border:1px solid var(--ligne);border-radius:0 16px 16px 16px;text-decoration:none;color:inherit;transition:.25s}
+.dossier::before{content:"";position:absolute;top:-14px;left:-1px;width:84px;height:14px;background:var(--carte);
+border:1px solid var(--ligne);border-bottom:0;border-radius:10px 10px 0 0;transition:.25s}
+.dossier:hover{transform:translateY(-4px);border-color:var(--acc);box-shadow:0 18px 40px -18px var(--acc)}
+.dossier:hover::before{border-color:var(--acc)}
+.dossier .num{font:600 .85rem var(--sans);color:var(--acc);letter-spacing:.1em}
+.dossier h3{font:600 1.55rem/1.2 var(--serif);margin:.4rem 0 .5rem}
+.dossier p{margin:0;color:var(--mut);font-size:.97rem}
+.dossier .compte{display:block;margin-top:1rem;font-size:.85rem;color:#6d6d6d}
 
-.citation{margin:2rem 0;padding:1.6rem 1.8rem;border-radius:20px;background:linear-gradient(120deg,rgba(124,58,237,.25),rgba(34,211,238,.15));border:1px solid rgba(255,255,255,.12);font:500 clamp(1.15rem,2.6vw,1.6rem)/1.45 var(--t)}
-.citation small{display:block;margin-top:.7rem;font:400 .9rem var(--b);color:var(--mut)}
-.texte{max-width:46rem}
-.texte p{margin:0 0 1.1rem}
+/* Liste de questions */
+.questions{list-style:none;margin:0;padding:0;max-width:46rem}
+.questions a{display:flex;gap:1.1rem;align-items:baseline;padding:1.15rem .4rem;border-top:1px solid var(--ligne);text-decoration:none;transition:.2s}
+.questions li:last-child a{border-bottom:1px solid var(--ligne)}
+.questions a:hover{padding-left:1rem;background:#080808;color:var(--acc)}
+.questions .n{font:600 1rem var(--serif);color:var(--acc);min-width:1.6rem}
+.questions .t{font:500 1.25rem/1.4 var(--serif)}
 
-/* Vidéo */
-.video{position:relative;aspect-ratio:16/9;border-radius:22px;overflow:hidden;border:1px solid rgba(255,255,255,.14);box-shadow:0 0 0 6px rgba(124,58,237,.18),0 30px 70px -20px rgba(124,58,237,.7);background:#000;max-width:56rem}
-.video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-.legende{color:var(--mut);max-width:56rem;margin:1.2rem 0 0}
-.legende a{color:var(--c)}
+/* Formulaire de réponse */
+form{max-width:46rem}
+label{display:block;font:600 .9rem var(--sans);margin:1.6rem 0 .5rem}
+textarea,input[type=text],input[type=email]{width:100%;background:#070707;color:var(--txt);border:1px solid #2a2a2a;border-radius:14px;
+padding:1rem 1.1rem;font:400 1.05rem/1.7 var(--sans);transition:.2s}
+textarea{min-height:16rem;resize:vertical}
+textarea:focus,input:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px rgba(184,166,255,.18)}
+::placeholder{color:#5f5f5f}
+.deux{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.piege{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.envoyer{margin-top:1.6rem;display:inline-flex;align-items:center;gap:.6rem;background:var(--txt);color:#000;border:0;border-radius:14px;
+padding:.95rem 1.7rem;font:600 1rem var(--sans);cursor:pointer;transition:.25s}
+.envoyer:hover{background:var(--acc);transform:translateY(-2px)}
+.envoyer:disabled{opacity:.5;cursor:wait;transform:none}
+.etat{min-height:1.6rem;margin:1rem 0 0;font-size:.98rem}
+.etat.ok{color:#7ee2a8}.etat.err{color:#ff8a8a}
+.note{margin-top:1.4rem;font-size:.85rem;color:#6d6d6d}
+.suite{display:flex;flex-wrap:wrap;gap:1.4rem;margin-top:2rem;font-size:.95rem}
+.suite a{color:var(--acc);text-decoration:none}
+.suite a:hover{text-decoration:underline}
 
-/* Questions */
-details{max-width:50rem;margin-bottom:.8rem;border-radius:16px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);overflow:hidden;transition:.3s}
-details[open]{border-color:var(--p);background:rgba(244,114,182,.07)}
-summary{cursor:pointer;list-style:none;padding:1.1rem 1.3rem;font:700 1.15rem var(--t);display:flex;justify-content:space-between;gap:1rem}
-summary::-webkit-details-marker{display:none}
-summary::after{content:"+";color:var(--p);font-size:1.5rem;line-height:1;transition:transform .3s}
-details[open] summary::after{transform:rotate(45deg)}
-details p{margin:0;padding:0 1.3rem 1.2rem;color:var(--mut)}
-
-footer{text-align:center;padding:2.5rem 1rem 3rem;color:var(--mut);border-top:1px solid rgba(255,255,255,.08)}
-
-.rv{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s}
-.rv.in{opacity:1;transform:none}
-
-@media(max-width:760px){.hero{grid-template-columns:1fr;min-height:auto}.orbe{max-width:240px;order:-1}.logo{display:none}}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}html{scroll-behavior:auto}}
+@media(max-width:640px){.deux{grid-template-columns:1fr}.btn-menu span.mot{display:none}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
-<canvas id="fond" aria-hidden="true"></canvas>
-<div class="halo h1"></div><div class="halo h2"></div><div class="halo h3"></div>
 
-<header>
-  <div class="barre">
-    <span class="logo">Conscience</span>
-    <div role="tablist" aria-label="Sections du site">
-      <button role="tab" data-tab="accueil" aria-selected="true">Accueil</button>
-      <button role="tab" data-tab="conscience" aria-selected="false" tabindex="-1">La conscience</button>
-      <button role="tab" data-tab="philosophie" aria-selected="false" tabindex="-1">La philosophie</button>
-      <button role="tab" data-tab="penseurs" aria-selected="false" tabindex="-1">Les penseurs</button>
-      <button role="tab" data-tab="video" aria-selected="false" tabindex="-1">Vidéo</button>
-      <button role="tab" data-tab="questions" aria-selected="false" tabindex="-1">Questions</button>
-    </div>
-  </div>
-</header>
+<button class="btn-menu" id="btnMenu" aria-expanded="false" aria-controls="tiroir">
+  <span class="barres" aria-hidden="true"><i></i><i></i><i></i></span><span class="mot">Menu</span>
+</button>
+<div class="voile" id="voile"></div>
+<aside class="tiroir" id="tiroir" aria-label="Thèmes philosophiques">
+  <div class="tiroir-haut"><strong>Thèmes</strong><button class="fermer" id="fermer" aria-label="Fermer le menu">✕</button></div>
+  <a class="accueil" href="#">← Accueil</a>
+  <nav id="navThemes"></nav>
+</aside>
 
-<main>
-
-<!-- ACCUEIL -->
-<section class="panel" id="accueil" role="tabpanel">
-  <div class="hero">
-    <div>
-      <h1>Qui sommes-nous<br>quand <span class="grad">nous pensons&nbsp;?</span></h1>
-      <p class="intro">Un essai de réponses aux questions existentielles, pour comprendre la conscience et ce que nous sommes.</p>
-      <p class="frappe" id="frappe" aria-live="off"></p>
-      <div class="boutons">
-        <button class="btn plein" data-go="conscience">Explorer la conscience</button>
-        <button class="btn vide" data-go="video">Voir la vidéo</button>
-      </div>
-    </div>
-    <svg class="orbe" viewBox="0 0 300 300" aria-hidden="true">
-      <defs><radialGradient id="g" cx="50%" cy="42%" r="62%"><stop offset="0" stop-color="#fff"/><stop offset=".22" stop-color="#22d3ee"/><stop offset=".6" stop-color="#7c3aed"/><stop offset="1" stop-color="#0b1020"/></radialGradient></defs>
-      <circle class="r r1" cx="150" cy="150" r="140" stroke="#7c3aed"/>
-      <circle class="r r2" cx="150" cy="150" r="112" stroke="#22d3ee"/>
-      <circle class="r r3" cx="150" cy="150" r="84" stroke="#f472b6"/>
-      <circle class="noyau" cx="150" cy="150" r="54" fill="url(#g)"/>
-    </svg>
-  </div>
-  <div class="grille">
-    <div class="carte k1 rv"><div class="ico">🧠</div><h3>La conscience</h3><p>Pourquoi vivons-nous nos expériences de l’intérieur&nbsp;?</p></div>
-    <div class="carte k2 rv"><div class="ico">📚</div><h3>La philosophie</h3><p>Quatre territoires pour penser le monde, la vérité et la vie bonne.</p></div>
-    <div class="carte k3 rv"><div class="ico">🎬</div><h3>Une conférence</h3><p>Un philosophe explique le « problème difficile » en moins de vingt minutes.</p></div>
-  </div>
-</section>
-
-<!-- CONSCIENCE -->
-<section class="panel" id="conscience" role="tabpanel" hidden>
-  <h2>La <span class="grad">conscience</span></h2>
-  <p class="sous">Être conscient, c’est savoir qu’on est là, et vivre ce que l’on perçoit.</p>
-  <div class="texte rv">
-    <p>Quand je regarde un coucher de soleil, il se passe plus que de la lumière sur ma rétine : je vis cette scène, de l’intérieur. Les philosophes appellent cela l’expérience subjective.</p>
-    <p>En 1637, Descartes pose une première pierre : même si je doute de tout, je ne peux pas douter que je doute. La pensée devient le point de départ de toute certitude.</p>
-  </div>
-  <div class="citation rv">« Je pense, donc je suis. »<small>René Descartes, Discours de la méthode (1637)</small></div>
-  <div class="texte rv"><p>En 1995, le philosophe David Chalmers a nommé le « problème difficile » : expliquer pourquoi les processus du cerveau s’accompagnent d’une expérience vécue, et pas seulement comment ils fonctionnent. Trois grandes réponses s’affrontent.</p></div>
-  <div class="grille">
-    <div class="carte k1 rv"><div class="ico">⚙️</div><h3>Le matérialisme</h3><p>La conscience naît de l’activité du cerveau, comme la musique naît d’un instrument.</p></div>
-    <div class="carte k2 rv"><div class="ico">✨</div><h3>Le dualisme</h3><p>L’esprit est d’une autre nature que la matière. C’est la piste ouverte par Descartes.</p></div>
-    <div class="carte k3 rv"><div class="ico">🌌</div><h3>Le panpsychisme</h3><p>La conscience serait une propriété fondamentale de l’univers, comme l’espace ou le temps.</p></div>
-  </div>
-</section>
-
-<!-- PHILOSOPHIE -->
-<section class="panel" id="philosophie" role="tabpanel" hidden>
-  <h2>La <span class="grad">philosophie</span></h2>
-  <p class="sous">Le mot vient du grec et signifie « amour de la sagesse ». Philosopher, c’est poser des questions simples, refuser les réponses toutes faites et justifier chaque réponse par des raisons.</p>
-  <div class="grille">
-    <div class="carte k1 rv"><div class="ico">🔭</div><h3>La métaphysique</h3><p>Ce qui existe vraiment : l’esprit, le temps, le libre arbitre.</p></div>
-    <div class="carte k2 rv"><div class="ico">💡</div><h3>La connaissance</h3><p>Ce que nous pouvons savoir, et comment nous pouvons en être sûrs.</p></div>
-    <div class="carte k3 rv"><div class="ico">⚖️</div><h3>L’éthique</h3><p>Ce qui est juste, et la manière de bien vivre.</p></div>
-    <div class="carte k4 rv"><div class="ico">🏛️</div><h3>La politique</h3><p>La meilleure façon de vivre ensemble.</p></div>
-  </div>
-</section>
-
-<!-- PENSEURS -->
-<section class="panel" id="penseurs" role="tabpanel" hidden>
-  <h2>Les <span class="grad">penseurs</span></h2>
-  <p class="sous">Quatre voix qui ont changé notre façon de penser.</p>
-  <div class="grille">
-    <div class="carte k4 rv"><div class="avatar">S</div><div class="date">470 – 399 av. J.-C.</div><h3>Socrate</h3><p>Il interroge sans cesse pour faire naître la vérité. On lui prête la phrase « Je sais que je ne sais rien ».</p></div>
-    <div class="carte k2 rv"><div class="avatar">D</div><div class="date">1596 – 1650</div><h3>Descartes</h3><p>Il fait du doute une méthode et de la pensée la première certitude.</p></div>
-    <div class="carte k3 rv"><div class="avatar">K</div><div class="date">1724 – 1804</div><h3>Kant</h3><p>Il résume la philosophie en trois questions : que puis-je savoir, que dois-je faire, que m’est-il permis d’espérer&nbsp;?</p></div>
-    <div class="carte k1 rv"><div class="avatar">C</div><div class="date">né en 1966</div><h3>David Chalmers</h3><p>Il a formulé le « problème difficile » de la conscience, au cœur du débat actuel.</p></div>
-  </div>
-</section>
-
-<!-- VIDÉO -->
-<section class="panel" id="video" role="tabpanel" hidden>
-  <h2>La <span class="grad">conférence</span></h2>
-  <p class="sous">Pour aller plus loin, une conférence TED où David Chalmers présente le problème difficile de la conscience.</p>
-  <div class="video"><iframe id="lecteur" data-src="https://www.youtube-nocookie.com/embed/uhRhtFFhNzQ" title="David Chalmers : How do you explain consciousness ?" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
-  <p class="legende">« How do you explain consciousness? », par David Chalmers (TED, environ 18 minutes, en anglais). Active les sous-titres dans le lecteur si besoin. <a href="https://www.youtube.com/watch?v=uhRhtFFhNzQ" target="_blank" rel="noopener">Ouvrir sur YouTube</a>.</p>
-</section>
-
-<!-- QUESTIONS -->
-<section class="panel" id="questions" role="tabpanel" hidden>
-  <h2>Les grandes <span class="grad">questions</span></h2>
-  <p class="sous">Quelques tentatives de réponse. Touche une question pour lire la réponse.</p>
-  <details><summary>Qui suis-je ?</summary><p>Je suis à la fois un corps, une mémoire et un regard. Mon corps change, mes souvenirs se transforment, et pourtant je me sens le même. Peut-être que je suis moins une chose fixe qu’une histoire que je continue d’écrire, avec les autres.</p></details>
-  <details><summary>Pourquoi existons-nous ?</summary><p>Aucune preuve ne donne un but à l’existence. Mais nous pouvons lui en donner un : aimer, comprendre, créer, aider. Le sens n’est peut-être pas une découverte à faire, mais une œuvre à construire.</p></details>
-  <details><summary>Sommes-nous vraiment libres ?</summary><p>Nos choix naissent de notre histoire, de notre corps, de notre époque. Pourtant, nous pouvons réfléchir à nos désirs avant d’agir. Cette distance entre l’impulsion et le geste est sans doute là où commence la liberté.</p></details>
-  <details><summary>Que devient la conscience après la mort ?</summary><p>Personne ne peut le prouver. Si la conscience dépend du cerveau, elle s’éteint avec lui. Si elle le dépasse, elle continue sous une autre forme. Face à ce doute, la sagesse est d’accueillir la question sans s’en laisser paralyser.</p></details>
-  <details><summary>Qu’est-ce qu’une vie réussie ?</summary><p>Ni la richesse ni la gloire ne suffisent. Beaucoup de penseurs la décrivent comme une vie qui a du sens pour celui qui la vit : des liens sincères, un travail qui compte, et la liberté de continuer à apprendre.</p></details>
-</section>
-
-</main>
-
-<footer>Un essai ouvert, écrit avec humilité et curiosité.</footer>
+<main id="scene"></main>
 
 <script>
 (function(){
-  var reduit = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var onglets = [].slice.call(document.querySelectorAll('[role=tab]'));
-  var panneaux = [].slice.call(document.querySelectorAll('.panel'));
-  var ids = onglets.map(function(t){return t.dataset.tab;});
+  /* ADRESSE QUI REÇOIT LES RÉPONSES (voir les explications après le code) */
+  var ENDPOINT = "https://formsubmit.co/ajax/tabomar2007@gmail.com";
 
-  /* Apparition au défilement */
-  var obs = 'IntersectionObserver' in window ? new IntersectionObserver(function(es){
-    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target);} });
-  },{threshold:.15}) : null;
-  function revele(){
-    document.querySelectorAll('.panel:not([hidden]) .rv:not(.in)').forEach(function(el){
-      if(obs){ obs.observe(el); } else { el.classList.add('in'); }
-    });
+  var T = [
+    {n:"La conscience", d:"Ce que signifie sentir, penser et être soi.", s:[
+      {n:"L’esprit et le corps", q:[
+        "Mon esprit est-il identique à mon cerveau ?",
+        "Un robot pourrait-il un jour être vraiment conscient ?",
+        "Pourquoi ressentons-nous des émotions plutôt que de simplement réagir ?",
+        "Les animaux ont-ils une conscience comparable à la nôtre ?",
+        "Que se passe-t-il dans notre conscience quand nous dormons ou rêvons ?"]},
+      {n:"Le moi et l’identité", q:[
+        "Suis-je la même personne qu’il y a dix ans ?",
+        "Qu’est-ce qui fait de moi quelqu’un d’unique ?",
+        "Le regard des autres façonne-t-il qui je suis ?",
+        "Peut-on se connaître vraiment soi-même ?",
+        "Si je perdais tous mes souvenirs, serais-je encore moi ?"]}]},
+    {n:"L’existence", d:"Le sens de la vie, la mort et le temps qui passe.", s:[
+      {n:"Le sens de la vie", q:[
+        "La vie a-t-elle un sens, ou devons-nous le créer ?",
+        "Le bonheur est-il le but de l’existence ?",
+        "Faut-il souffrir pour grandir ?",
+        "Qu’est-ce qui donne de la valeur à une vie ?",
+        "Vaut-il mieux vivre intensément ou vivre longtemps ?"]},
+      {n:"La mort et le temps", q:[
+        "Faut-il avoir peur de la mort ?",
+        "La mort donne-t-elle un sens à la vie ?",
+        "Le temps existe-t-il vraiment, ou n’est-il qu’une impression de notre esprit ?",
+        "Que reste-t-il de nous quand nous disparaissons ?",
+        "Vivrions-nous mieux si nous étions immortels ?"]}]},
+    {n:"La liberté et la morale", d:"Nos choix, nos responsabilités, le bien et le mal.", s:[
+      {n:"Le libre arbitre", q:[
+        "Sommes-nous vraiment libres de nos choix ?",
+        "Peut-on être responsable de ce que l’on n’a pas choisi d’être ?",
+        "Être libre, est-ce faire tout ce que l’on veut ?",
+        "Notre éducation décide-t-elle de nos choix à notre place ?",
+        "Un monde où tout serait prévisible serait-il un monde sans liberté ?"]},
+      {n:"Le bien et le mal", q:[
+        "Le bien et le mal existent-ils indépendamment des cultures ?",
+        "Le mensonge est-il parfois justifié ?",
+        "Peut-on faire le mal en croyant faire le bien ?",
+        "Faut-il juger une action sur ses intentions ou sur ses conséquences ?",
+        "Pourquoi devrions-nous être justes quand personne ne nous voit ?"]}]},
+    {n:"La connaissance", d:"Ce que nous pouvons savoir, croire et comprendre.", s:[
+      {n:"Vérité et réalité", q:[
+        "Existe-t-il une vérité absolue ?",
+        "Peut-on être certain que le monde est tel que nous le percevons ?",
+        "Nos sens nous trompent-ils plus qu’ils ne nous renseignent ?",
+        "Une vérité douloureuse vaut-elle mieux qu’un mensonge réconfortant ?",
+        "La science peut-elle tout expliquer ?"]},
+      {n:"Raison et croyance", q:[
+        "Peut-on croire sans preuve ?",
+        "La raison suffit-elle pour bien vivre ?",
+        "Doute-t-on trop ou pas assez aujourd’hui ?",
+        "Les émotions sont-elles un obstacle à la pensée juste ?",
+        "Que signifie vraiment « comprendre » quelque chose ?"]}]}
+  ];
+
+  var scene = document.getElementById("scene");
+  var body = document.body;
+
+  /* Menu latéral */
+  var nav = document.getElementById("navThemes");
+  nav.innerHTML = T.map(function(t, i){
+    return '<details><summary>' + t.n + '</summary>' +
+      t.s.map(function(s, j){ return '<a href="#t' + i + '-s' + j + '">' + s.n + '</a>'; }).join("") +
+      '</details>';
+  }).join("");
+  var btn = document.getElementById("btnMenu");
+  function menu(ouvre){
+    body.classList.toggle("ouvert", ouvre);
+    btn.setAttribute("aria-expanded", ouvre);
+    if(ouvre){ document.getElementById("fermer").focus(); } else if(document.activeElement && document.activeElement.closest && document.activeElement.closest("#tiroir")){ btn.focus(); }
   }
+  btn.addEventListener("click", function(){ menu(!body.classList.contains("ouvert")); });
+  document.getElementById("fermer").addEventListener("click", function(){ menu(false); });
+  document.getElementById("voile").addEventListener("click", function(){ menu(false); });
+  document.addEventListener("keydown", function(e){ if(e.key === "Escape") menu(false); });
 
-  /* Changement d'onglet */
-  function afficher(id, maj){
-    if(ids.indexOf(id) < 0) id = 'accueil';
-    onglets.forEach(function(t){
-      var on = t.dataset.tab === id;
-      t.setAttribute('aria-selected', on); t.tabIndex = on ? 0 : -1;
-      if(on) t.scrollIntoView({inline:'center', block:'nearest'});
-    });
-    panneaux.forEach(function(p){ p.hidden = p.id !== id; });
-    var f = document.getElementById('lecteur');
-    if(id === 'video' && !f.src) f.src = f.dataset.src;
-    if(maj !== false) history.replaceState(null, '', '#' + id);
-    window.scrollTo(0, 0);
-    revele();
+  /* Affichage selon l'adresse (#t0-s1-q2) */
+  function fil(parts){
+    return '<nav class="fil" aria-label="Fil d’Ariane">' + parts.map(function(p){
+      return p.h ? '<a href="' + p.h + '">' + p.l + '</a>' : '<b>' + p.l + '</b>';
+    }).join('<span>/</span>') + '</nav>';
   }
-  onglets.forEach(function(t, i){
-    t.addEventListener('click', function(){ afficher(t.dataset.tab); });
-    t.addEventListener('keydown', function(e){
-      var n = e.key === 'ArrowRight' ? i + 1 : e.key === 'ArrowLeft' ? i - 1 : null;
-      if(n === null) return;
-      n = (n + onglets.length) % onglets.length; onglets[n].focus(); afficher(ids[n]);
-    });
-  });
-  document.querySelectorAll('[data-go]').forEach(function(b){
-    b.addEventListener('click', function(){ afficher(b.dataset.go); });
-  });
-  window.addEventListener('hashchange', function(){ afficher(location.hash.slice(1), false); });
-  afficher(location.hash.slice(1) || 'accueil', false);
-
-  /* Inclinaison 3D des cartes */
-  document.querySelectorAll('.carte').forEach(function(c){
-    c.addEventListener('mousemove', function(e){
-      if(reduit) return;
-      var r = c.getBoundingClientRect();
-      c.style.setProperty('--ry', ((e.clientX - r.left)/r.width - .5) * 10 + 'deg');
-      c.style.setProperty('--rx', (.5 - (e.clientY - r.top)/r.height) * 10 + 'deg');
-    });
-    c.addEventListener('mouseleave', function(){ c.style.setProperty('--rx','0deg'); c.style.setProperty('--ry','0deg'); });
-  });
-
-  /* Phrases qui s'écrivent */
-  var phrases = ['/OMARX/'];
-  var el = document.getElementById('frappe');
-  if(reduit){ el.textContent = phrases[0]; }
-  else {
-    var p = 0, i = 0, sens = 1;
-    (function tour(){
-      var mot = phrases[p];
-      i += sens; el.textContent = mot.slice(0, i);
-      var d = 60;
-      if(sens === 1 && i === mot.length){ sens = -1; d = 1800; }
-      else if(sens === -1 && i === 0){ sens = 1; p = (p + 1) % phrases.length; d = 400; }
-      else if(sens === -1){ d = 25; }
-      setTimeout(tour, d);
-    })();
-  }
-
-  /* Fond animé : réseau de particules colorées */
-  var cv = document.getElementById('fond'), cx = cv.getContext('2d'), W, H, pts = [];
-  var couleurs = ['124,58,237','34,211,238','244,114,182','251,191,36'];
-  function taille(){
-    W = cv.width = innerWidth; H = cv.height = innerHeight;
-    var n = Math.min(70, Math.floor(W * H / 20000)); pts = [];
-    for(var k = 0; k < n; k++) pts.push({x:Math.random()*W, y:Math.random()*H, vx:(Math.random()-.5)*.35, vy:(Math.random()-.5)*.35, c:couleurs[k % 4], r:1.2 + Math.random()*1.8});
-  }
-  function dessine(){
-    cx.clearRect(0, 0, W, H);
-    for(var a = 0; a < pts.length; a++){
-      var A = pts[a];
-      if(!reduit){ A.x += A.vx; A.y += A.vy; if(A.x < 0 || A.x > W) A.vx *= -1; if(A.y < 0 || A.y > H) A.vy *= -1; }
-      cx.beginPath(); cx.arc(A.x, A.y, A.r, 0, 6.283); cx.fillStyle = 'rgba(' + A.c + ',.9)'; cx.fill();
-      for(var b = a + 1; b < pts.length; b++){
-        var B = pts[b], dx = A.x - B.x, dy = A.y - B.y, d = dx*dx + dy*dy;
-        if(d < 14000){ cx.strokeStyle = 'rgba(' + A.c + ',' + (1 - d/14000) * .35 + ')'; cx.lineWidth = .8; cx.beginPath(); cx.moveTo(A.x, A.y); cx.lineTo(B.x, B.y); cx.stroke(); }
-      }
+  function afficher(){
+    var m = /^#t(\d+)(?:-s(\d+))?(?:-q(\d+))?$/.exec(location.hash);
+    var t = m ? T[+m[1]] : null, s = t && m[2] !== undefined ? t.s[+m[2]] : null, q = s && m[3] !== undefined ? s.q[+m[3]] : null;
+    var h = "";
+    if(!t){
+      h = '<div class="vue"><span class="etiquette">Questions philosophiques</span>' +
+        '<h1>Pense.<br>Réponds.<br>Partage.</h1>' +
+        '<p class="intro">Choisis un thème, ouvre un dossier, puis réponds librement aux questions. Tu peux écrire autant que tu veux.</p>' +
+        '<div class="grille">' + T.map(function(x, i){
+          return '<a class="dossier" href="#t' + i + '"><span class="num">THÈME 0' + (i+1) + '</span><h3>' + x.n + '</h3><p>' + x.d + '</p><span class="compte">' + x.s.length + ' sous-thèmes · ' + x.s.length*5 + ' questions</span></a>';
+        }).join("") + '</div></div>';
+    } else if(!s){
+      h = '<div class="vue">' + fil([{l:"Accueil",h:"#"},{l:t.n}]) + '<h1>' + t.n + '</h1><p class="intro">' + t.d + '</p><div class="grille">' +
+        t.s.map(function(x, j){
+          return '<a class="dossier" href="#t' + m[1] + '-s' + j + '"><span class="num">DOSSIER 0' + (j+1) + '</span><h3>' + x.n + '</h3><span class="compte">5 questions</span></a>';
+        }).join("") + '</div></div>';
+    } else if(q === null){
+      h = '<div class="vue">' + fil([{l:"Accueil",h:"#"},{l:t.n,h:"#t"+m[1]},{l:s.n}]) + '<h1>' + s.n + '</h1><p class="intro">Choisis une question et réponds comme tu veux.</p><ol class="questions">' +
+        s.q.map(function(x, k){
+          return '<li><a href="#t' + m[1] + '-s' + m[2] + '-q' + k + '"><span class="n">' + (k+1) + '</span><span class="t">' + x + '</span></a></li>';
+        }).join("") + '</ol></div>';
+    } else {
+      var k = +m[3], base = "#t" + m[1] + "-s" + m[2];
+      var suiv = k < 4 ? '<a href="' + base + '-q' + (k+1) + '">Question suivante →</a>' : "";
+      h = '<div class="vue">' + fil([{l:"Accueil",h:"#"},{l:t.n,h:"#t"+m[1]},{l:s.n,h:base},{l:"Question " + (k+1)}]) +
+        '<span class="etiquette">' + t.n + ' · ' + s.n + '</span><h1 class="q">' + q + '</h1>' +
+        '<form id="form" novalidate>' +
+        '<label for="rep">Ta réponse</label>' +
+        '<textarea id="rep" name="reponse" placeholder="Écris ici, sans limite de longueur…" required></textarea>' +
+        '<div class="deux"><div><label for="prenom">Ton prénom (facultatif)</label><input type="text" id="prenom" name="prenom" autocomplete="given-name"></div>' +
+        '<div><label for="mail">Ton email (facultatif)</label><input type="email" id="mail" name="email" autocomplete="email"></div></div>' +
+        '<input type="text" name="_honey" class="piege" tabindex="-1" autocomplete="off" aria-hidden="true">' +
+        '<button class="envoyer" type="submit">Envoyer ma réponse</button>' +
+        '<p class="etat" id="etat" role="status"></p>' +
+        '<p class="note">Ta réponse est envoyée par email à l’auteur du site. Ne mets pas d’informations trop personnelles.</p>' +
+        '<div class="suite"><a href="' + base + '">← Toutes les questions</a>' + suiv + '</div></form></div>';
     }
-    if(!reduit) requestAnimationFrame(dessine);
+    scene.innerHTML = h;
+    window.scrollTo(0, 0);
+    document.title = (q || (s && s.n) || (t && t.n) || "Questions philosophiques") + " · Philosophie";
+    if(q){ branche(t.n, s.n, q, k); }
   }
-  addEventListener('resize', taille); taille(); dessine();
+
+  /* Envoi de la réponse par email */
+  function branche(theme, sous, question, k){
+    var f = document.getElementById("form"), etat = document.getElementById("etat");
+    f.addEventListener("submit", function(e){
+      e.preventDefault();
+      var rep = f.reponse.value.trim();
+      etat.className = "etat";
+      if(!rep){ etat.className = "etat err"; etat.textContent = "Écris ta réponse avant de l’envoyer."; f.reponse.focus(); return; }
+      var b = f.querySelector(".envoyer"); b.disabled = true; etat.textContent = "Envoi en cours…";
+      var data = {
+        _subject: "Réponse philosophique : " + question,
+        _template: "table", _captcha: "false", _honey: f._honey.value,
+        theme: theme, sous_theme: sous, question: question, reponse: rep,
+        prenom: f.prenom.value.trim() || "(anonyme)", email: f.email.value.trim() || "(non donné)"
+      };
+      if(f.email.value.trim()) data._replyto = f.email.value.trim();
+      fetch(ENDPOINT, {method:"POST", headers:{"Content-Type":"application/json","Accept":"application/json"}, body:JSON.stringify(data)})
+        .then(function(r){ return r.json(); })
+        .then(function(j){
+          if(j && (j.success === true || j.success === "true")){
+            etat.className = "etat ok"; etat.textContent = "Merci ! Ta réponse a bien été envoyée.";
+            f.reponse.value = "";
+          } else { throw new Error("refus"); }
+        })
+        .catch(function(){
+          etat.className = "etat err";
+          etat.textContent = "L’envoi a échoué. Ta réponse est toujours dans la case : copie-la, puis réessaie dans un moment.";
+        })
+        .then(function(){ b.disabled = false; });
+    });
+  }
+
+  window.addEventListener("hashchange", function(){ menu(false); afficher(); });
+  afficher();
 })();
 </script>
 </body>
