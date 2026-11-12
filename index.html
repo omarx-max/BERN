@@ -1,289 +1,890 @@
+Voici le fichier HTML complet, avec `bibliotheque.js` ajouté au début du `<body>`. Place `bibliotheque.js` dans le même dossier que ce fichier HTML.
+
+```html name=index.html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Questions philosophiques</title>
-<meta name="description" content="Choisis un thème, ouvre un dossier et réponds librement à des questions philosophiques.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-:root{--noir:#000;--carte:#0b0b0b;--ligne:#222;--txt:#f3f3f3;--mut:#9a9a9a;--acc:#b8a6ff;
---serif:"Cormorant Garamond",Georgia,serif;--sans:"Inter",system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:var(--noir);color:var(--txt);font:400 1.05rem/1.7 var(--sans);min-height:100vh}
-a{color:inherit}
-:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Questions philosophiques</title>
+  <meta name="description" content="Choisis un thème, ouvre un dossier et réponds librement à des questions philosophiques.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
-/* Bouton menu en haut à gauche */
-.btn-menu{position:fixed;top:1rem;left:1rem;z-index:40;display:flex;align-items:center;gap:.6rem;
-background:#0b0b0b;color:var(--txt);border:1px solid #333;border-radius:12px;padding:.65rem 1rem;
-font:600 .95rem var(--sans);cursor:pointer;transition:.25s}
-.btn-menu:hover{border-color:var(--acc);box-shadow:0 0 24px -6px var(--acc)}
-.btn-menu .barres{display:grid;gap:4px}
-.btn-menu .barres i{display:block;width:18px;height:2px;background:currentColor;border-radius:2px}
+  <style>
+    :root {
+      --noir: #000;
+      --carte: #0b0b0b;
+      --ligne: #222;
+      --txt: #f3f3f3;
+      --mut: #9a9a9a;
+      --acc: #b8a6ff;
+      --serif: "Cormorant Garamond", Georgia, serif;
+      --sans: "Inter", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+    }
 
-/* Tiroir de navigation */
-.voile{position:fixed;inset:0;background:rgba(0,0,0,.7);opacity:0;visibility:hidden;transition:.3s;z-index:45}
-.tiroir{position:fixed;top:0;left:0;bottom:0;width:min(23rem,88vw);background:#050505;border-right:1px solid var(--ligne);
-transform:translateX(-100%);visibility:hidden;transition:transform .3s,visibility .3s;z-index:50;overflow-y:auto;padding:1.2rem 1.2rem 3rem}
-.ouvert .tiroir{transform:none;visibility:visible}
-.ouvert .voile{opacity:1;visibility:visible}
-.tiroir-haut{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.4rem}
-.tiroir-haut strong{font:600 1.5rem var(--serif)}
-.fermer{background:none;border:1px solid #333;color:var(--txt);border-radius:10px;width:38px;height:38px;font-size:1.2rem;cursor:pointer}
-.tiroir a.accueil{display:block;padding:.7rem .8rem;border-radius:10px;text-decoration:none;color:var(--mut);margin-bottom:.6rem}
-.tiroir a.accueil:hover{color:var(--txt);background:#111}
-.tiroir details{border-top:1px solid var(--ligne);padding:.3rem 0}
-.tiroir summary{cursor:pointer;list-style:none;padding:.8rem .8rem;font:600 1.25rem var(--serif);display:flex;justify-content:space-between;gap:1rem}
-.tiroir summary::-webkit-details-marker{display:none}
-.tiroir summary::after{content:"+";color:var(--acc);font-family:var(--sans)}
-.tiroir details[open] summary::after{content:"−"}
-.tiroir details a{display:block;margin:.15rem 0 .15rem .8rem;padding:.55rem .9rem;border-left:2px solid #2a2a2a;color:var(--mut);text-decoration:none;font-size:.97rem}
-.tiroir details a:hover{color:var(--txt);border-left-color:var(--acc);background:#0d0d0d}
+    * {
+      box-sizing: border-box;
+    }
 
-/* Scène principale */
-main{max-width:62rem;margin:0 auto;padding:5.5rem 1.4rem 4rem}
-.fil{font-size:.9rem;color:var(--mut);margin-bottom:1.6rem}
-.fil a{color:var(--mut);text-decoration:none}
-.fil a:hover{color:var(--txt)}
-.fil span{margin:0 .4rem;opacity:.5}
-h1{font:600 clamp(2.4rem,7vw,4.4rem)/1.05 var(--serif);margin:0 0 1rem;letter-spacing:-.01em}
-h1.q{font-size:clamp(1.9rem,5vw,3rem);line-height:1.15}
-.intro{color:var(--mut);max-width:38rem;margin:0 0 2.4rem;font-size:1.12rem}
-.etiquette{display:inline-block;font:500 .8rem var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--acc);margin-bottom:.8rem}
-.vue{animation:entree .45s ease both}
-@keyframes entree{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+    html {
+      scroll-behavior: smooth;
+    }
 
-/* Dossiers */
-.grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(16rem,1fr));gap:1.8rem 1.4rem}
-.dossier{position:relative;display:block;margin-top:14px;padding:1.5rem 1.4rem 1.4rem;background:var(--carte);
-border:1px solid var(--ligne);border-radius:0 16px 16px 16px;text-decoration:none;color:inherit;transition:.25s}
-.dossier::before{content:"";position:absolute;top:-14px;left:-1px;width:84px;height:14px;background:var(--carte);
-border:1px solid var(--ligne);border-bottom:0;border-radius:10px 10px 0 0;transition:.25s}
-.dossier:hover{transform:translateY(-4px);border-color:var(--acc);box-shadow:0 18px 40px -18px var(--acc)}
-.dossier:hover::before{border-color:var(--acc)}
-.dossier .num{font:600 .85rem var(--sans);color:var(--acc);letter-spacing:.1em}
-.dossier h3{font:600 1.55rem/1.2 var(--serif);margin:.4rem 0 .5rem}
-.dossier p{margin:0;color:var(--mut);font-size:.97rem}
-.dossier .compte{display:block;margin-top:1rem;font-size:.85rem;color:#6d6d6d}
+    body {
+      margin: 0;
+      background: var(--noir);
+      color: var(--txt);
+      font: 400 1.05rem/1.7 var(--sans);
+      min-height: 100vh;
+    }
 
-/* Liste de questions */
-.questions{list-style:none;margin:0;padding:0;max-width:46rem}
-.questions a{display:flex;gap:1.1rem;align-items:baseline;padding:1.15rem .4rem;border-top:1px solid var(--ligne);text-decoration:none;transition:.2s}
-.questions li:last-child a{border-bottom:1px solid var(--ligne)}
-.questions a:hover{padding-left:1rem;background:#080808;color:var(--acc)}
-.questions .n{font:600 1rem var(--serif);color:var(--acc);min-width:1.6rem}
-.questions .t{font:500 1.25rem/1.4 var(--serif)}
+    a {
+      color: inherit;
+    }
 
-/* Formulaire de réponse */
-form{max-width:46rem}
-label{display:block;font:600 .9rem var(--sans);margin:1.6rem 0 .5rem}
-textarea,input[type=text],input[type=email]{width:100%;background:#070707;color:var(--txt);border:1px solid #2a2a2a;border-radius:14px;
-padding:1rem 1.1rem;font:400 1.05rem/1.7 var(--sans);transition:.2s}
-textarea{min-height:16rem;resize:vertical}
-textarea:focus,input:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px rgba(184,166,255,.18)}
-::placeholder{color:#5f5f5f}
-.deux{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-.piege{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
-.envoyer{margin-top:1.6rem;display:inline-flex;align-items:center;gap:.6rem;background:var(--txt);color:#000;border:0;border-radius:14px;
-padding:.95rem 1.7rem;font:600 1rem var(--sans);cursor:pointer;transition:.25s}
-.envoyer:hover{background:var(--acc);transform:translateY(-2px)}
-.envoyer:disabled{opacity:.5;cursor:wait;transform:none}
-.etat{min-height:1.6rem;margin:1rem 0 0;font-size:.98rem}
-.etat.ok{color:#7ee2a8}.etat.err{color:#ff8a8a}
-.note{margin-top:1.4rem;font-size:.85rem;color:#6d6d6d}
-.suite{display:flex;flex-wrap:wrap;gap:1.4rem;margin-top:2rem;font-size:.95rem}
-.suite a{color:var(--acc);text-decoration:none}
-.suite a:hover{text-decoration:underline}
+    :focus-visible {
+      outline: 2px solid var(--acc);
+      outline-offset: 3px;
+    }
 
-@media(max-width:640px){.deux{grid-template-columns:1fr}.btn-menu span.mot{display:none}}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
-</style>
+    /* Bouton menu en haut à gauche */
+    .btn-menu {
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      z-index: 40;
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      background: #0b0b0b;
+      color: var(--txt);
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: .65rem 1rem;
+      font: 600 .95rem var(--sans);
+      cursor: pointer;
+      transition: .25s;
+    }
+
+    .btn-menu:hover {
+      border-color: var(--acc);
+      box-shadow: 0 0 24px -6px var(--acc);
+    }
+
+    .btn-menu .barres {
+      display: grid;
+      gap: 4px;
+    }
+
+    .btn-menu .barres i {
+      display: block;
+      width: 18px;
+      height: 2px;
+      background: currentColor;
+      border-radius: 2px;
+    }
+
+    /* Tiroir de navigation */
+    .voile {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .7);
+      opacity: 0;
+      visibility: hidden;
+      transition: .3s;
+      z-index: 45;
+    }
+
+    .tiroir {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: min(23rem, 88vw);
+      background: #050505;
+      border-right: 1px solid var(--ligne);
+      transform: translateX(-100%);
+      visibility: hidden;
+      transition: transform .3s, visibility .3s;
+      z-index: 50;
+      overflow-y: auto;
+      padding: 1.2rem 1.2rem 3rem;
+    }
+
+    .ouvert .tiroir {
+      transform: none;
+      visibility: visible;
+    }
+
+    .ouvert .voile {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .tiroir-haut {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.4rem;
+    }
+
+    .tiroir-haut strong {
+      font: 600 1.5rem var(--serif);
+    }
+
+    .fermer {
+      background: none;
+      border: 1px solid #333;
+      color: var(--txt);
+      border-radius: 10px;
+      width: 38px;
+      height: 38px;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .tiroir a.accueil {
+      display: block;
+      padding: .7rem .8rem;
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--mut);
+      margin-bottom: .6rem;
+    }
+
+    .tiroir a.accueil:hover {
+      color: var(--txt);
+      background: #111;
+    }
+
+    .tiroir details {
+      border-top: 1px solid var(--ligne);
+      padding: .3rem 0;
+    }
+
+    .tiroir summary {
+      cursor: pointer;
+      list-style: none;
+      padding: .8rem;
+      font: 600 1.25rem var(--serif);
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .tiroir summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .tiroir summary::after {
+      content: "+";
+      color: var(--acc);
+      font-family: var(--sans);
+    }
+
+    .tiroir details[open] summary::after {
+      content: "−";
+    }
+
+    .tiroir details a {
+      display: block;
+      margin: .15rem 0 .15rem .8rem;
+      padding: .55rem .9rem;
+      border-left: 2px solid #2a2a2a;
+      color: var(--mut);
+      text-decoration: none;
+      font-size: .97rem;
+    }
+
+    .tiroir details a:hover {
+      color: var(--txt);
+      border-left-color: var(--acc);
+      background: #0d0d0d;
+    }
+
+    /* Scène principale */
+    main {
+      max-width: 62rem;
+      margin: 0 auto;
+      padding: 5.5rem 1.4rem 4rem;
+    }
+
+    .fil {
+      font-size: .9rem;
+      color: var(--mut);
+      margin-bottom: 1.6rem;
+    }
+
+    .fil a {
+      color: var(--mut);
+      text-decoration: none;
+    }
+
+    .fil a:hover {
+      color: var(--txt);
+    }
+
+    .fil span {
+      margin: 0 .4rem;
+      opacity: .5;
+    }
+
+    h1 {
+      font: 600 clamp(2.4rem, 7vw, 4.4rem)/1.05 var(--serif);
+      margin: 0 0 1rem;
+      letter-spacing: -.01em;
+    }
+
+    h1.q {
+      font-size: clamp(1.9rem, 5vw, 3rem);
+      line-height: 1.15;
+    }
+
+    .intro {
+      color: var(--mut);
+      max-width: 38rem;
+      margin: 0 0 2.4rem;
+      font-size: 1.12rem;
+    }
+
+    .etiquette {
+      display: inline-block;
+      font: 500 .8rem var(--sans);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--acc);
+      margin-bottom: .8rem;
+    }
+
+    .vue {
+      animation: entree .45s ease both;
+    }
+
+    @keyframes entree {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    /* Dossiers */
+    .grille {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+      gap: 1.8rem 1.4rem;
+    }
+
+    .dossier {
+      position: relative;
+      display: block;
+      margin-top: 14px;
+      padding: 1.5rem 1.4rem 1.4rem;
+      background: var(--carte);
+      border: 1px solid var(--ligne);
+      border-radius: 0 16px 16px 16px;
+      text-decoration: none;
+      color: inherit;
+      transition: .25s;
+    }
+
+    .dossier::before {
+      content: "";
+      position: absolute;
+      top: -14px;
+      left: -1px;
+      width: 84px;
+      height: 14px;
+      background: var(--carte);
+      border: 1px solid var(--ligne);
+      border-bottom: 0;
+      border-radius: 10px 10px 0 0;
+      transition: .25s;
+    }
+
+    .dossier:hover {
+      transform: translateY(-4px);
+      border-color: var(--acc);
+      box-shadow: 0 18px 40px -18px var(--acc);
+    }
+
+    .dossier:hover::before {
+      border-color: var(--acc);
+    }
+
+    .dossier .num {
+      font: 600 .85rem var(--sans);
+      color: var(--acc);
+      letter-spacing: .1em;
+    }
+
+    .dossier h3 {
+      font: 600 1.55rem/1.2 var(--serif);
+      margin: .4rem 0 .5rem;
+    }
+
+    .dossier p {
+      margin: 0;
+      color: var(--mut);
+      font-size: .97rem;
+    }
+
+    .dossier .compte {
+      display: block;
+      margin-top: 1rem;
+      font-size: .85rem;
+      color: #6d6d6d;
+    }
+
+    /* Liste de questions */
+    .questions {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      max-width: 46rem;
+    }
+
+    .questions a {
+      display: flex;
+      gap: 1.1rem;
+      align-items: baseline;
+      padding: 1.15rem .4rem;
+      border-top: 1px solid var(--ligne);
+      text-decoration: none;
+      transition: .2s;
+    }
+
+    .questions li:last-child a {
+      border-bottom: 1px solid var(--ligne);
+    }
+
+    .questions a:hover {
+      padding-left: 1rem;
+      background: #080808;
+      color: var(--acc);
+    }
+
+    .questions .n {
+      font: 600 1rem var(--serif);
+      color: var(--acc);
+      min-width: 1.6rem;
+    }
+
+    .questions .t {
+      font: 500 1.25rem/1.4 var(--serif);
+    }
+
+    /* Formulaire de réponse */
+    form {
+      max-width: 46rem;
+    }
+
+    label {
+      display: block;
+      font: 600 .9rem var(--sans);
+      margin: 1.6rem 0 .5rem;
+    }
+
+    textarea,
+    input[type="text"],
+    input[type="email"] {
+      width: 100%;
+      background: #070707;
+      color: var(--txt);
+      border: 1px solid #2a2a2a;
+      border-radius: 14px;
+      padding: 1rem 1.1rem;
+      font: 400 1.05rem/1.7 var(--sans);
+      transition: .2s;
+    }
+
+    textarea {
+      min-height: 16rem;
+      resize: vertical;
+    }
+
+    textarea:focus,
+    input:focus {
+      outline: none;
+      border-color: var(--acc);
+      box-shadow: 0 0 0 3px rgba(184, 166, 255, .18);
+    }
+
+    ::placeholder {
+      color: #5f5f5f;
+    }
+
+    .deux {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .piege {
+      position: absolute;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+    }
+
+    .envoyer {
+      margin-top: 1.6rem;
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      background: var(--txt);
+      color: #000;
+      border: 0;
+      border-radius: 14px;
+      padding: .95rem 1.7rem;
+      font: 600 1rem var(--sans);
+      cursor: pointer;
+      transition: .25s;
+    }
+
+    .envoyer:hover {
+      background: var(--acc);
+      transform: translateY(-2px);
+    }
+
+    .envoyer:disabled {
+      opacity: .5;
+      cursor: wait;
+      transform: none;
+    }
+
+    .etat {
+      min-height: 1.6rem;
+      margin: 1rem 0 0;
+      font-size: .98rem;
+    }
+
+    .etat.ok {
+      color: #7ee2a8;
+    }
+
+    .etat.err {
+      color: #ff8a8a;
+    }
+
+    .note {
+      margin-top: 1.4rem;
+      font-size: .85rem;
+      color: #6d6d6d;
+    }
+
+    .suite {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.4rem;
+      margin-top: 2rem;
+      font-size: .95rem;
+    }
+
+    .suite a {
+      color: var(--acc);
+      text-decoration: none;
+    }
+
+    .suite a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 640px) {
+      .deux {
+        grid-template-columns: 1fr;
+      }
+
+      .btn-menu span.mot {
+        display: none;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+
+      html {
+        scroll-behavior: auto;
+      }
+    }
+  </style>
 </head>
 
-<script src="bibliotheque.js"></script>
 <body>
+  <script src="bibliotheque.js"></script>
 
-<button class="btn-menu" id="btnMenu" aria-expanded="false" aria-controls="tiroir">
-  <span class="barres" aria-hidden="true"><i></i><i></i><i></i></span><span class="mot">Menu</span>
-</button>
-<div class="voile" id="voile"></div>
-<aside class="tiroir" id="tiroir" aria-label="Thèmes philosophiques">
-  <div class="tiroir-haut"><strong>Thèmes</strong><button class="fermer" id="fermer" aria-label="Fermer le menu">✕</button></div>
-  <a class="accueil" href="#">← Accueil</a>
-  <nav id="navThemes"></nav>
-</aside>
+  <button class="btn-menu" id="btnMenu" aria-expanded="false" aria-controls="tiroir">
+    <span class="barres" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="mot">Menu</span>
+  </button>
 
-<main id="scene"></main>
+  <div class="voile" id="voile"></div>
 
-<script>
-(function(){
-  /* ADRESSE QUI REÇOIT LES RÉPONSES (voir les explications après le code) */
-  var ENDPOINT = "https://formsubmit.co/ajax/tabomar2007@gmail.com";
+  <aside class="tiroir" id="tiroir" aria-label="Thèmes philosophiques">
+    <div class="tiroir-haut">
+      <strong>Thèmes</strong>
+      <button class="fermer" id="fermer" aria-label="Fermer le menu">✕</button>
+    </div>
+    <a class="accueil" href="#">← Accueil</a>
+    <nav id="navThemes"></nav>
+  </aside>
 
-  var T = [
-    {n:"La conscience", d:"Ce que signifie sentir, penser et être soi.", s:[
-      {n:"L’esprit et le corps", q:[
-        "Mon esprit est-il identique à mon cerveau ?",
-        "Un robot pourrait-il un jour être vraiment conscient ?",
-        "Pourquoi ressentons-nous des émotions plutôt que de simplement réagir ?",
-        "Les animaux ont-ils une conscience comparable à la nôtre ?",
-        "Que se passe-t-il dans notre conscience quand nous dormons ou rêvons ?"]},
-      {n:"Le moi et l’identité", q:[
-        "Suis-je la même personne qu’il y a dix ans ?",
-        "Qu’est-ce qui fait de moi quelqu’un d’unique ?",
-        "Le regard des autres façonne-t-il qui je suis ?",
-        "Peut-on se connaître vraiment soi-même ?",
-        "Si je perdais tous mes souvenirs, serais-je encore moi ?"]}]},
-    {n:"L’existence", d:"Le sens de la vie, la mort et le temps qui passe.", s:[
-      {n:"Le sens de la vie", q:[
-        "La vie a-t-elle un sens, ou devons-nous le créer ?",
-        "Le bonheur est-il le but de l’existence ?",
-        "Faut-il souffrir pour grandir ?",
-        "Qu’est-ce qui donne de la valeur à une vie ?",
-        "Vaut-il mieux vivre intensément ou vivre longtemps ?"]},
-      {n:"La mort et le temps", q:[
-        "Faut-il avoir peur de la mort ?",
-        "La mort donne-t-elle un sens à la vie ?",
-        "Le temps existe-t-il vraiment, ou n’est-il qu’une impression de notre esprit ?",
-        "Que reste-t-il de nous quand nous disparaissons ?",
-        "Vivrions-nous mieux si nous étions immortels ?"]}]},
-    {n:"La liberté et la morale", d:"Nos choix, nos responsabilités, le bien et le mal.", s:[
-      {n:"Le libre arbitre", q:[
-        "Sommes-nous vraiment libres de nos choix ?",
-        "Peut-on être responsable de ce que l’on n’a pas choisi d’être ?",
-        "Être libre, est-ce faire tout ce que l’on veut ?",
-        "Notre éducation décide-t-elle de nos choix à notre place ?",
-        "Un monde où tout serait prévisible serait-il un monde sans liberté ?"]},
-      {n:"Le bien et le mal", q:[
-        "Le bien et le mal existent-ils indépendamment des cultures ?",
-        "Le mensonge est-il parfois justifié ?",
-        "Peut-on faire le mal en croyant faire le bien ?",
-        "Faut-il juger une action sur ses intentions ou sur ses conséquences ?",
-        "Pourquoi devrions-nous être justes quand personne ne nous voit ?"]}]},
-    {n:"La connaissance", d:"Ce que nous pouvons savoir, croire et comprendre.", s:[
-      {n:"Vérité et réalité", q:[
-        "Existe-t-il une vérité absolue ?",
-        "Peut-on être certain que le monde est tel que nous le percevons ?",
-        "Nos sens nous trompent-ils plus qu’ils ne nous renseignent ?",
-        "Une vérité douloureuse vaut-elle mieux qu’un mensonge réconfortant ?",
-        "La science peut-elle tout expliquer ?"]},
-      {n:"Raison et croyance", q:[
-        "Peut-on croire sans preuve ?",
-        "La raison suffit-elle pour bien vivre ?",
-        "Doute-t-on trop ou pas assez aujourd’hui ?",
-        "Les émotions sont-elles un obstacle à la pensée juste ?",
-        "Que signifie vraiment « comprendre » quelque chose ?"]}]}
-  ];
+  <main id="scene"></main>
 
-  var scene = document.getElementById("scene");
-  var body = document.body;
+  <script>
+    (function () {
+      /* Adresse qui reçoit les réponses */
+      var ENDPOINT = "https://formsubmit.co/ajax/tabomar2007@gmail.com";
 
-  /* Menu latéral */
-  var nav = document.getElementById("navThemes");
-  nav.innerHTML = T.map(function(t, i){
-    return '<details><summary>' + t.n + '</summary>' +
-      t.s.map(function(s, j){ return '<a href="#t' + i + '-s' + j + '">' + s.n + '</a>'; }).join("") +
-      '</details>';
-  }).join("");
-  var btn = document.getElementById("btnMenu");
-  function menu(ouvre){
-    body.classList.toggle("ouvert", ouvre);
-    btn.setAttribute("aria-expanded", ouvre);
-    if(ouvre){ document.getElementById("fermer").focus(); } else if(document.activeElement && document.activeElement.closest && document.activeElement.closest("#tiroir")){ btn.focus(); }
-  }
-  btn.addEventListener("click", function(){ menu(!body.classList.contains("ouvert")); });
-  document.getElementById("fermer").addEventListener("click", function(){ menu(false); });
-  document.getElementById("voile").addEventListener("click", function(){ menu(false); });
-  document.addEventListener("keydown", function(e){ if(e.key === "Escape") menu(false); });
+      var T = [
+        {
+          n: "La conscience",
+          d: "Ce que signifie sentir, penser et être soi.",
+          s: [
+            {
+              n: "L’esprit et le corps",
+              q: [
+                "Mon esprit est-il identique à mon cerveau ?",
+                "Un robot pourrait-il un jour être vraiment conscient ?",
+                "Pourquoi ressentons-nous des émotions plutôt que de simplement réagir ?",
+                "Les animaux ont-ils une conscience comparable à la nôtre ?",
+                "Que se passe-t-il dans notre conscience quand nous dormons ou rêvons ?"
+              ]
+            },
+            {
+              n: "Le moi et l’identité",
+              q: [
+                "Suis-je la même personne qu’il y a dix ans ?",
+                "Qu’est-ce qui fait de moi quelqu’un d’unique ?",
+                "Le regard des autres façonne-t-il qui je suis ?",
+                "Peut-on se connaître vraiment soi-même ?",
+                "Si je perdais tous mes souvenirs, serais-je encore moi ?"
+              ]
+            }
+          ]
+        },
+        {
+          n: "L’existence",
+          d: "Le sens de la vie, la mort et le temps qui passe.",
+          s: [
+            {
+              n: "Le sens de la vie",
+              q: [
+                "La vie a-t-elle un sens, ou devons-nous le créer ?",
+                "Le bonheur est-il le but de l’existence ?",
+                "Faut-il souffrir pour grandir ?",
+                "Qu’est-ce qui donne de la valeur à une vie ?",
+                "Vaut-il mieux vivre intensément ou vivre longtemps ?"
+              ]
+            },
+            {
+              n: "La mort et le temps",
+              q: [
+                "Faut-il avoir peur de la mort ?",
+                "La mort donne-t-elle un sens à la vie ?",
+                "Le temps existe-t-il vraiment, ou n’est-il qu’une impression de notre esprit ?",
+                "Que reste-t-il de nous quand nous disparaissons ?",
+                "Vivrions-nous mieux si nous étions immortels ?"
+              ]
+            }
+          ]
+        },
+        {
+          n: "La liberté et la morale",
+          d: "Nos choix, nos responsabilités, le bien et le mal.",
+          s: [
+            {
+              n: "Le libre arbitre",
+              q: [
+                "Sommes-nous vraiment libres de nos choix ?",
+                "Peut-on être responsable de ce que l’on n’a pas choisi d’être ?",
+                "Être libre, est-ce faire tout ce que l’on veut ?",
+                "Notre éducation décide-t-elle de nos choix à notre place ?",
+                "Un monde où tout serait prévisible serait-il un monde sans liberté ?"
+              ]
+            },
+            {
+              n: "Le bien et le mal",
+              q: [
+                "Le bien et le mal existent-ils indépendamment des cultures ?",
+                "Le mensonge est-il parfois justifié ?",
+                "Peut-on faire le mal en croyant faire le bien ?",
+                "Faut-il juger une action sur ses intentions ou sur ses conséquences ?",
+                "Pourquoi devrions-nous être justes quand personne ne nous voit ?"
+              ]
+            }
+          ]
+        },
+        {
+          n: "La connaissance",
+          d: "Ce que nous pouvons savoir, croire et comprendre.",
+          s: [
+            {
+              n: "Vérité et réalité",
+              q: [
+                "Existe-t-il une vérité absolue ?",
+                "Peut-on être certain que le monde est tel que nous le percevons ?",
+                "Nos sens nous trompent-ils plus qu’ils ne nous renseignent ?",
+                "Une vérité douloureuse vaut-elle mieux qu’un mensonge réconfortant ?",
+                "La science peut-elle tout expliquer ?"
+              ]
+            },
+            {
+              n: "Raison et croyance",
+              q: [
+                "Peut-on croire sans preuve ?",
+                "La raison suffit-elle pour bien vivre ?",
+                "Doute-t-on trop ou pas assez aujourd’hui ?",
+                "Les émotions sont-elles un obstacle à la pensée juste ?",
+                "Que signifie vraiment « comprendre » quelque chose ?"
+              ]
+            }
+          ]
+        }
+      ];
 
-  /* Affichage selon l'adresse (#t0-s1-q2) */
-  function fil(parts){
-    return '<nav class="fil" aria-label="Fil d’Ariane">' + parts.map(function(p){
-      return p.h ? '<a href="' + p.h + '">' + p.l + '</a>' : '<b>' + p.l + '</b>';
-    }).join('<span>/</span>') + '</nav>';
-  }
-  function afficher(){
-    var m = /^#t(\d+)(?:-s(\d+))?(?:-q(\d+))?$/.exec(location.hash);
-    var t = m ? T[+m[1]] : null, s = t && m[2] !== undefined ? t.s[+m[2]] : null, q = s && m[3] !== undefined ? s.q[+m[3]] : null;
-    var h = "";
-    if(!t){
-      h = '<div class="vue"><span class="etiquette">Questions philosophiques</span>' +
-        '<h1>Pense.<br>Réponds.<br>Partage.</h1>' +
-        '<p class="intro">Choisis un thème, ouvre un dossier, puis réponds librement aux questions. Tu peux écrire autant que tu veux.</p>' +
-        '<div class="grille">' + T.map(function(x, i){
-          return '<a class="dossier" href="#t' + i + '"><span class="num">THÈME 0' + (i+1) + '</span><h3>' + x.n + '</h3><p>' + x.d + '</p><span class="compte">' + x.s.length + ' sous-thèmes · ' + x.s.length*5 + ' questions</span></a>';
-        }).join("") + '</div></div>';
-    } else if(!s){
-      h = '<div class="vue">' + fil([{l:"Accueil",h:"#"},{l:t.n}]) + '<h1>' + t.n + '</h1><p class="intro">' + t.d + '</p><div class="grille">' +
-        t.s.map(function(x, j){
-          return '<a class="dossier" href="#t' + m[1] + '-s' + j + '"><span class="num">DOSSIER 0' + (j+1) + '</span><h3>' + x.n + '</h3><span class="compte">5 questions</span></a>';
-        }).join("") + '</div></div>';
-    } else if(q === null){
-      h = '<div class="vue">' + fil([{l:"Accueil",h:"#"},{l:t.n,h:"#t"+m[1]},{l:s.n}]) + '<h1>' + s.n + '</h1><p class="intro">Choisis une question et réponds comme tu veux.</p><ol class="questions">' +
-        s.q.map(function(x, k){
-          return '<li><a href="#t' + m[1] + '-s' + m[2] + '-q' + k + '"><span class="n">' + (k+1) + '</span><span class="t">' + x + '</span></a></li>';
-        }).join("") + '</ol></div>';
-    } else {
-      var k = +m[3], base = "#t" + m[1] + "-s" + m[2];
-      var suiv = k < 4 ? '<a href="' + base + '-q' + (k+1) + '">Question suivante →</a>' : "";
-      h = '<div class="vue">' + fil([{l:"Accueil",h:"#"},{l:t.n,h:"#t"+m[1]},{l:s.n,h:base},{l:"Question " + (k+1)}]) +
-        '<span class="etiquette">' + t.n + ' · ' + s.n + '</span><h1 class="q">' + q + '</h1>' +
-        '<form id="form" novalidate>' +
-        '<label for="rep">Ta réponse</label>' +
-        '<textarea id="rep" name="reponse" placeholder="Écris ici, sans limite de longueur…" required></textarea>' +
-        '<div class="deux"><div><label for="prenom">Ton prénom (facultatif)</label><input type="text" id="prenom" name="prenom" autocomplete="given-name"></div>' +
-        '<div><label for="mail">Ton email (facultatif)</label><input type="email" id="mail" name="email" autocomplete="email"></div></div>' +
-        '<input type="text" name="_honey" class="piege" tabindex="-1" autocomplete="off" aria-hidden="true">' +
-        '<button class="envoyer" type="submit">Envoyer ma réponse</button>' +
-        '<p class="etat" id="etat" role="status"></p>' +
-        '<p class="note">Ta réponse est envoyée par email à l’auteur du site. Ne mets pas d’informations trop personnelles.</p>' +
-        '<div class="suite"><a href="' + base + '">← Toutes les questions</a>' + suiv + '</div></form></div>';
-    }
-    scene.innerHTML = h;
-    window.scrollTo(0, 0);
-    document.title = (q || (s && s.n) || (t && t.n) || "Questions philosophiques") + " · Philosophie";
-    if(q){ branche(t.n, s.n, q, k); }
-  }
+      var scene = document.getElementById("scene");
+      var body = document.body;
 
-  /* Envoi de la réponse par email */
-  function branche(theme, sous, question, k){
-    var f = document.getElementById("form"), etat = document.getElementById("etat");
-    f.addEventListener("submit", function(e){
-      e.preventDefault();
-      var rep = f.reponse.value.trim();
-      etat.className = "etat";
-      if(!rep){ etat.className = "etat err"; etat.textContent = "Écris ta réponse avant de l’envoyer."; f.reponse.focus(); return; }
-      var b = f.querySelector(".envoyer"); b.disabled = true; etat.textContent = "Envoi en cours…";
-      var data = {
-        _subject: "Réponse philosophique : " + question,
-        _template: "table", _captcha: "false", _honey: f._honey.value,
-        theme: theme, sous_theme: sous, question: question, reponse: rep,
-        prenom: f.prenom.value.trim() || "(anonyme)", email: f.email.value.trim() || "(non donné)"
-      };
-      if(f.email.value.trim()) data._replyto = f.email.value.trim();
-      fetch(ENDPOINT, {method:"POST", headers:{"Content-Type":"application/json","Accept":"application/json"}, body:JSON.stringify(data)})
-        .then(function(r){ return r.json(); })
-        .then(function(j){
-          if(j && (j.success === true || j.success === "true")){
-            etat.className = "etat ok"; etat.textContent = "Merci  de ta réponse";
-            f.reponse.value = "";
-          } else { throw new Error("refus"); }
-        })
-        .catch(function(){
-          etat.className = "etat err";
-          etat.textContent = "L’envoi a échoué. Ta réponse est toujours dans la case : copie-la, puis réessaie dans un moment.";
-        })
-        .then(function(){ b.disabled = false; });
-    });
-  }
+      /* Menu latéral */
+      var nav = document.getElementById("navThemes");
 
-  window.addEventListener("hashchange", function(){ menu(false); afficher(); });
-  afficher();
-})();
-</script>
+      nav.innerHTML = T.map(function (t, i) {
+        return "<details><summary>" + t.n + "</summary>" +
+          t.s.map(function (s, j) {
+            return '<a href="#t' + i + "-s" + j + '">' + s.n + "</a>";
+          }).join("") +
+          "</details>";
+      }).join("");
+
+      var btn = document.getElementById("btnMenu");
+
+      function menu(ouvre) {
+        body.classList.toggle("ouvert", ouvre);
+        btn.setAttribute("aria-expanded", ouvre);
+
+        if (ouvre) {
+          document.getElementById("fermer").focus();
+        } else if (
+          document.activeElement &&
+          document.activeElement.closest &&
+          document.activeElement.closest("#tiroir")
+        ) {
+          btn.focus();
+        }
+      }
+
+      btn.addEventListener("click", function () {
+        menu(!body.classList.contains("ouvert"));
+      });
+
+      document.getElementById("fermer").addEventListener("click", function () {
+        menu(false);
+      });
+
+      document.getElementById("voile").addEventListener("click", function () {
+        menu(false);
+      });
+
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+          menu(false);
+        }
+      });
+
+      /* Affichage selon l'adresse (#t0-s1-q2) */
+      function fil(parts) {
+        return '<nav class="fil" aria-label="Fil d’Ariane">' +
+          parts.map(function (p) {
+            return p.h
+              ? '<a href="' + p.h + '">' + p.l + "</a>"
+              : "<b>" + p.l + "</b>";
+          }).join("<span>/</span>") +
+          "</nav>";
+      }
+
+      function afficher() {
+        var m = /^#t(\d+)(?:-s(\d+))?(?:-q(\d+))?$/.exec(location.hash);
+        var t = m ? T[+m[1]] : null;
+        var s = t && m[2] !== undefined ? t.s[+m[2]] : null;
+        var q = s && m[3] !== undefined ? s.q[+m[3]] : null;
+        var h = "";
+
+        if (!t) {
+          h = '<div class="vue"><span class="etiquette">Questions philosophiques</span>' +
+            "<h1>Pense.<br>Réponds.<br>Partage.</h1>" +
+            '<p class="intro">Choisis un thème, ouvre un dossier, puis réponds librement aux questions. Tu peux écrire autant que tu veux.</p>' +
+            '<div class="grille">' +
+            T.map(function (x, i) {
+              return '<a class="dossier" href="#t' + i + '">' +
+                '<span class="num">THÈME 0' + (i + 1) + "</span>" +
+                "<h3>" + x.n + "</h3>" +
+                "<p>" + x.d + "</p>" +
+                '<span class="compte">' + x.s.length + " sous-thèmes · " +
+                x.s.length * 5 + " questions</span></a>";
+            }).join("") +
+            "</div></div>";
+        } else if (!s) {
+          h = '<div class="vue">' +
+            fil([{ l: "Accueil", h: "#" }, { l: t.n }]) +
+            "<h1>" + t.n + "</h1>" +
+            '<p class="intro">' + t.d + '</p><div class="grille">' +
+            t.s.map(function (x, j) {
+              return '<a class="dossier" href="#t' + m[1] + "-s" + j + '">' +
+                '<span class="num">DOSSIER 0' + (j + 1) + "</span>" +
+                "<h3>" + x.n + "</h3>" +
+                '<span class="compte">5 questions</span></a>';
+            }).join("") +
+            "</div></div>";
+        } else if (q === null) {
+          h = '<div class="vue">' +
+            fil([
+              { l: "Accueil", h: "#" },
+              { l: t.n, h: "#t" + m[1] },
+              { l: s.n }
+            ]) +
+            "<h1>" + s.n + "</h1>" +
+            '<p class="intro">Choisis une question et réponds comme tu veux.</p>' +
+            '<ol class="questions">' +
+            s.q.map(function (x, k) {
+              return '<li><a href="#t' + m[1] + "-s" + m[2] + "-q" + k + '">' +
+                '<span class="n">' + (k + 1) + "</span>" +
+                '<span class="t">' + x + "</span></a></li>";
+            }).join("") +
+            "</ol></div>";
+        } else {
+          var k = +m[3];
+          var base = "#t" + m[1] + "-s" + m[2];
+          var suiv = k < 4
+            ? '<a href="' + base + "-q" + (k + 1) + '">Question suivante →</a>'
+            : "";
+
+          h = '<div class="vue">' +
+            fil([
+              { l: "Accueil", h: "#" },
+              { l: t.n, h: "#t" + m[1] },
+              { l: s.n, h: base },
+              { l: "Question " + (k + 1) }
+            ]) +
+            '<span class="etiquette">' + t.n + " · " + s.n + "</span>" +
+            '<h1 class="q">' + q + "</h1>" +
+            '<form id="form" novalidate>' +
+            '<label for="rep">Ta réponse</label>' +
+            '<textarea id="rep" name="reponse" placeholder="Écris ici, sans limite de longueur…" required></textarea>' +
+            '<div class="deux">' +
+            '<div><label for="prenom">Ton prénom (facultatif)</label>' +
+            '<input type="text" id="prenom" name="prenom" autocomplete="given-name"></div>' +
+            '<div><label for="mail">Ton email (facultatif)</label>' +
+            '<input type="email" id="mail" name="email" autocomplete="email"></div>' +
+            "</div>" +
+            '<input type="text" name="_honey" class="piege" tabindex="-1" autocomplete="off" aria-hidden="true">' +
+            '<button class="envoyer" type="submit">Envoyer ma réponse</button>' +
+            '<p class="etat" id="etat" role="status"></p>' +
+            '<p class="note">Ta réponse est envoyée par email à l’auteur du site. Ne mets pas d’informations trop personnelles.</p>' +
+            '<div class="suite"><a href="' + base + '">← Toutes les questions</a>' +
+            suiv + "</div></form></div>";
+        }
+
+        scene.innerHTML = h;
+        window.scrollTo(0, 0);
+
+        document.title =
+          (q || (s && s.n) || (t && t.n) || "Questions philosophiques") +
+          " · Philosophie";
+
+        if (q) {
+          branche(t.n, s.n, q, k);
+        }
+      }
+
+      /* Envoi de la réponse par email */
+      function branche(theme, sous, question, k) {
+        var f = document.getElementById("form");
+        var etat = document.getElementById("etat");
+
+        f.addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          var rep = f.reponse.value.trim();
+          etat.className = "etat";
+
+          if (!rep) {
+            etat.className = "etat err";
+            etat.textContent = "Écris ta réponse avant de l’envoyer.";
+            f.reponse.focus();
+            return;
+          }
+
+          var b = f.querySelector(".envoyer");
+          b.disabled = true;
+          etat.textContent = "Envoi en cours…";
+
+          var data = {
+            _subject: "Réponse philosophique : " + question,
+            _template: "table",
+            _captcha: "false",
+            _honey: f._honey.value,
+            theme: theme,
+            sous_theme: sous,
+            question: question,
+            reponse: rep,
+            prenom: f.prenom.value.trim() || "(anonyme)",
+            email: f.email.value.trim() || "(non donné)"
+          };
+
+          if (f.email.value.trim()) {
+            data._replyto = f.email.value.trim();
+          }
+
+          fetch(ENDPOINT, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json"
+            },
+            body: JSON.stringify(data)
+          })
+            .then(function (r) {
+              return r.json();
+            })
+            .then(function (j) {
+              if (j && (j.success === true || j.success === "true")) {
+                etat.className = "etat ok";
+                etat.textContent = "Merci de ta réponse";
+                f.reponse.value = "";
+              } else {
+                throw new Error("refus");
+              }
+            })
+            .catch(function () {
+              etat.className = "etat err";
+              etat.textContent =
+                "L’envoi a échoué. Ta réponse est toujours dans la case : copie-la, puis réessaie dans un moment.";
+            })
+            .then(function () {
+              b.disabled = false;
+            });
+        });
+      }
+
+      window.addEventListener("hashchange", function () {
+        menu(false);
+        afficher();
+      });
+
+      afficher();
+    })();
+  </script>
 </body>
 </html>
+```
