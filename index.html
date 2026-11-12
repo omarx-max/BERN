@@ -267,7 +267,7 @@ padding:.95rem 1.7rem;font:600 1rem var(--sans);cursor:pointer;transition:.25s}
         .then(function(r){ return r.json(); })
         .then(function(j){
           if(j && (j.success === true || j.success === "true")){
-            etat.className = "etat ok"; etat.textContent = "Merci ! Ta réponse a bien été envoyée.";
+            etat.className = "etat ok"; etat.textContent = "Merci  de ta réponse";
             f.reponse.value = "";
           } else { throw new Error("refus"); }
         })
