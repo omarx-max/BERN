@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#000000">
 <title>Qui sommes-nous quand nous pensons ?</title>
-<meta name="description" content="Des réponses sincères aux grandes questions existentielles, et un espace pour écrire les tiennes.">
+<meta name="description" content="20 thèmes, 100 questions philosophiques et une page pour écrire ta réponse, sans limite de longueur.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--noir:#000;--carte:#090909;--ligne:#1d1d1d;--txt:#f4f4f4;--mut:#9a9a9a;--acc:#b8a6ff;
+:root{--noir:#000;--carte:#090909;--ligne:#1c1c1c;--txt:#f4f4f4;--mut:#9a9a9a;--acc:#b8a6ff;
 --serif:"Cormorant Garamond",Georgia,"Times New Roman",serif;--sans:"Inter",system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;background:#000}
@@ -19,8 +19,12 @@ a{color:inherit}
 ::selection{background:#7c5cff;color:#fff}
 :focus-visible{outline:2px solid var(--acc);outline-offset:3px}
 .grain{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.07;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-.lueur{position:fixed;inset:0;z-index:0;pointer-events:none;--e:0;transition:.8s;
-background:radial-gradient(60rem 30rem at 50% -12%,rgba(124,92,255,calc(.1 + var(--e)*.25)),transparent 62%),radial-gradient(40rem 24rem at 100% 110%,rgba(94,224,255,calc(.03 + var(--e)*.1)),transparent 60%)}
+/* Lueur : en haut quand on écrit, en bas de plus en plus colorée quand on descend */
+.lueur{position:fixed;inset:0;z-index:0;pointer-events:none;--h:260;--p:0;--e:0;transition:--h .8s;
+background:radial-gradient(60rem 28rem at 50% -12%,hsla(var(--h),90%,62%,calc(.14 + var(--e)*.24)),transparent 62%),
+radial-gradient(75rem 34rem at 50% 120%,hsla(calc(var(--h) + 70),95%,58%,calc(.08 + var(--p)*.34)),transparent 62%),
+radial-gradient(42rem 28rem at 0% 105%,hsla(calc(var(--h) + 150),95%,60%,calc(var(--p)*.22)),transparent 60%),
+radial-gradient(42rem 28rem at 100% 100%,hsla(calc(var(--h) + 220),95%,60%,calc(var(--p)*.18)),transparent 60%)}
 
 /* Menu */
 .btn-menu{position:fixed;top:1rem;left:1rem;z-index:40;display:flex;align-items:center;gap:.6rem;height:44px;background:rgba(10,10,10,.85);backdrop-filter:blur(10px);color:var(--txt);border:1px solid #2e2e2e;border-radius:12px;padding:0 1rem;font:600 .95rem var(--sans);cursor:pointer;transition:.25s}
@@ -28,44 +32,46 @@ background:radial-gradient(60rem 30rem at 50% -12%,rgba(124,92,255,calc(.1 + var
 .btn-menu .barres{display:grid;gap:4px}
 .btn-menu .barres i{display:block;width:18px;height:2px;background:currentColor;border-radius:2px}
 .voile{position:fixed;inset:0;background:rgba(0,0,0,.75);opacity:0;visibility:hidden;transition:.3s;z-index:45}
-.tiroir{position:fixed;top:0;left:0;bottom:0;width:min(23rem,88vw);background:#040404;border-right:1px solid var(--ligne);transform:translateX(-100%);visibility:hidden;transition:transform .35s cubic-bezier(.2,.8,.2,1),visibility .35s;z-index:50;overflow-y:auto;padding:1.2rem 1.2rem 3rem}
+.tiroir{position:fixed;top:0;left:0;bottom:0;width:min(25rem,90vw);background:#040404;border-right:1px solid var(--ligne);transform:translateX(-100%);visibility:hidden;transition:transform .35s cubic-bezier(.2,.8,.2,1),visibility .35s;z-index:50;overflow-y:auto;padding:1.2rem 1rem 3rem}
 .ouvert .tiroir{transform:none;visibility:visible}
 .ouvert .voile{opacity:1;visibility:visible}
-.tiroir-haut{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.4rem}
+.tiroir-haut{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
 .tiroir-haut strong{font:600 1.6rem var(--serif)}
 .fermer{background:none;border:1px solid #2e2e2e;color:var(--txt);border-radius:10px;width:38px;height:38px;font-size:1.1rem;cursor:pointer}
-.tiroir a.accueil{display:block;padding:.7rem .8rem;border-radius:10px;text-decoration:none;color:var(--mut);margin-bottom:.4rem}
+.tiroir a.accueil{display:block;padding:.6rem .8rem;border-radius:10px;text-decoration:none;color:var(--mut);margin-bottom:.3rem}
 .tiroir a.accueil:hover{color:var(--txt);background:#111}
-.tiroir details{border-top:1px solid var(--ligne);padding:.3rem 0}
-.tiroir summary{cursor:pointer;list-style:none;padding:.8rem;font:600 1.3rem var(--serif);display:flex;justify-content:space-between;gap:1rem}
+#filtre{width:100%;margin:.6rem 0 .8rem;background:#0a0a0a;color:var(--txt);border:1px solid #2a2a2a;border-radius:12px;padding:.7rem 1rem;font:400 .95rem var(--sans)}
+#filtre:focus{outline:none;border-color:var(--acc)}
+.tiroir details{border-top:1px solid var(--ligne)}
+.tiroir summary{cursor:pointer;list-style:none;padding:.75rem .5rem;font:600 1.15rem var(--serif);display:flex;align-items:center;gap:.7rem;border-radius:10px}
+.tiroir summary:hover{background:#0d0d0d}
 .tiroir summary::-webkit-details-marker{display:none}
-.tiroir summary::after{content:"+";color:var(--acc);font-family:var(--sans)}
+.tiroir summary::after{content:"+";margin-left:auto;color:var(--k);font-family:var(--sans)}
 .tiroir details[open] summary::after{content:"−"}
-.tiroir details a{display:block;margin:.15rem 0 .15rem .8rem;padding:.55rem .9rem;border-left:2px solid #262626;color:var(--mut);text-decoration:none;font-size:.97rem;transition:.2s}
-.tiroir details a:hover{color:var(--txt);border-left-color:var(--acc);background:#0c0c0c}
+.pt{flex:none;width:.65rem;height:.65rem;border-radius:50%;background:var(--k);box-shadow:0 0 12px var(--k)}
+.tiroir details a{display:block;margin:.1rem 0 .1rem 1.2rem;padding:.5rem .8rem;border-left:2px solid #262626;color:var(--mut);text-decoration:none;font-size:.92rem;line-height:1.4;transition:.2s}
+.tiroir details a:hover{color:var(--txt);border-left-color:var(--k);background:#0c0c0c}
+.tiroir details a.tl{color:var(--k);font-weight:600}
 
-/* Base de page */
+/* Base */
 main{position:relative;z-index:1;max-width:66rem;margin:0 auto;padding:5.8rem 1.4rem 4rem}
 .fil{font-size:.9rem;color:var(--mut);margin-bottom:1.8rem}
 .fil a{color:var(--mut);text-decoration:none}.fil a:hover{color:var(--txt)}.fil span{margin:0 .4rem;opacity:.45}
 h1{font:600 clamp(2.6rem,8vw,5.2rem)/1 var(--serif);margin:0 0 1.2rem;letter-spacing:-.015em}
-h1.q{font-size:clamp(2rem,5.4vw,3.3rem);line-height:1.12;max-width:44rem}
+h1.q{font-size:clamp(2.1rem,5.6vw,3.6rem);line-height:1.1;max-width:44rem}
 .intro{color:var(--mut);max-width:38rem;margin:0 0 2.4rem;font-size:1.15rem}
 .etiquette{display:inline-block;font:500 .78rem var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--k,var(--acc));margin-bottom:1rem}
-.vue{animation:entree .55s cubic-bezier(.2,.8,.2,1) both}
+.vue{animation:entree .6s cubic-bezier(.2,.8,.2,1) both}
 @keyframes entree{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-.rv{opacity:0;transform:translateY(28px);transition:opacity .9s,transform .9s cubic-bezier(.2,.8,.2,1)}
+.rv{opacity:0;transform:translateY(28px);transition:opacity .9s var(--d,0s),transform .9s cubic-bezier(.2,.8,.2,1) var(--d,0s)}
 .rv.in{opacity:1;transform:none}
 .grad{background:linear-gradient(90deg,#b8a6ff,#5ee0ff,#ff8fc7,#ffcc66,#b8a6ff);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 10s linear infinite}
 @keyframes flow{to{background-position:300% 0}}
 .titre{font:600 clamp(1.9rem,4.6vw,3rem)/1.1 var(--serif);margin:0 0 2rem}
 .sec{margin-top:6.5rem}
-
-/* Boutons */
-.cta{display:inline-flex;align-items:center;gap:.5rem;background:var(--txt);color:#000;border-radius:14px;padding:.9rem 1.6rem;text-decoration:none;font:600 .98rem var(--sans);border:1px solid var(--txt);transition:.25s}
+.cta{display:inline-flex;align-items:center;gap:.5rem;background:var(--txt);color:#000;border-radius:14px;padding:.9rem 1.6rem;text-decoration:none;font:600 .98rem var(--sans);border:1px solid var(--txt);cursor:pointer;transition:.25s}
 .cta:hover{background:var(--acc);border-color:var(--acc);transform:translateY(-2px);box-shadow:0 14px 40px -14px var(--acc)}
-.cta.vide{background:transparent;color:var(--txt);border-color:#3a3a3a}
-.cta.vide:hover{color:#000}
+.cta.vide{background:transparent;color:var(--txt);border-color:#3a3a3a}.cta.vide:hover{color:#000}
 .btns{display:flex;flex-wrap:wrap;gap:.8rem}
 
 /* Accueil */
@@ -85,20 +91,19 @@ h1.q{font-size:clamp(2rem,5.4vw,3.3rem);line-height:1.12;max-width:44rem}
 .manif{margin-top:6rem}
 .manif p{font:500 clamp(1.7rem,4.4vw,3rem)/1.25 var(--serif);max-width:52rem;margin:0}
 .manif em{color:var(--acc)}
-.grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(16rem,1fr));gap:1.9rem 1.4rem}
-.dossier{position:relative;display:block;margin-top:14px;padding:1.6rem 1.5rem 1.5rem;background:var(--carte);border:1px solid var(--ligne);border-radius:0 18px 18px 18px;text-decoration:none;color:inherit;transition:.3s}
+.grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(15rem,1fr));gap:1.9rem 1.3rem}
+.dossier{position:relative;display:block;margin-top:14px;padding:1.5rem 1.4rem 1.4rem;background:var(--carte);border:1px solid var(--ligne);border-radius:0 18px 18px 18px;text-decoration:none;color:inherit;transition:.3s}
 .dossier::before{content:"";position:absolute;top:-14px;left:-1px;width:84px;height:14px;background:var(--carte);border:1px solid var(--ligne);border-bottom:0;border-radius:10px 10px 0 0;transition:.3s}
 .dossier::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:.3s;background:radial-gradient(16rem circle at var(--mx,50%) var(--my,0%),rgba(255,255,255,.09),transparent 62%)}
 .dossier:hover{transform:translateY(-5px);border-color:var(--k,var(--acc));box-shadow:0 24px 54px -24px var(--k,var(--acc))}
 .dossier:hover::before{border-color:var(--k,var(--acc))}
 .dossier:hover::after{opacity:1}
 .dossier .num{font:600 .8rem var(--sans);color:var(--k,var(--acc));letter-spacing:.12em}
-.dossier h3{font:600 1.7rem/1.15 var(--serif);margin:.4rem 0 .6rem}
-.dossier p{margin:0;color:var(--mut);font-size:.98rem}
-.dossier .compte{display:block;margin-top:1.1rem;font-size:.85rem;color:#767676}
-.jourbox{max-width:48rem;padding:2rem 2rem 2.1rem;border-radius:22px;border:1px solid rgba(184,166,255,.3);background:radial-gradient(30rem 14rem at 0% 0%,rgba(124,92,255,.22),transparent 70%),#050505}
-.qh{font:600 clamp(1.6rem,3.6vw,2.3rem)/1.2 var(--serif);margin:0 0 1rem}
-.jourbox p{color:#cfcfcf;font-size:1.1rem;line-height:1.8;margin:0 0 1.5rem}
+.dossier h3{font:600 1.6rem/1.15 var(--serif);margin:.4rem 0 .5rem}
+.dossier p{margin:0;color:var(--mut);font-size:.96rem}
+.dossier .compte{display:block;margin-top:1rem;font-size:.85rem;color:#767676}
+.jourbox{max-width:48rem;padding:2.2rem 2rem;border-radius:22px;border:1px solid rgba(184,166,255,.3);background:radial-gradient(30rem 14rem at 0% 0%,rgba(124,92,255,.22),transparent 70%),#050505}
+.qh{font:600 clamp(1.8rem,4vw,2.6rem)/1.15 var(--serif);margin:0 0 1.6rem}
 .marq{overflow:hidden;border-block:1px solid var(--ligne);padding:1.4rem 0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
 .piste{display:flex;width:max-content;animation:defile 60s linear infinite}
 .marq:hover .piste{animation-play-state:paused}
@@ -113,57 +118,63 @@ h1.q{font-size:clamp(2rem,5.4vw,3.3rem);line-height:1.12;max-width:44rem}
 .citrot.f{animation:entree .8s both}
 .etapes{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:1.4rem}
 .etape{padding:1.8rem;border:1px solid var(--ligne);border-radius:20px;background:linear-gradient(160deg,#0c0c0c,#050505)}
-.etape b{font:600 2.6rem/1 var(--serif);color:var(--acc);display:block;margin-bottom:.6rem}
+.etape b{font:600 2.6rem/1 var(--serif);display:block;margin-bottom:.6rem}
+.etape:nth-child(1) b{color:#b8a6ff}.etape:nth-child(2) b{color:#ff8fc7}.etape:nth-child(3) b{color:#ffcc66}
 .etape h3{font:600 1.6rem var(--serif);margin:0 0 .4rem}
 .etape p{margin:0;color:var(--mut)}
-.final{margin-top:7rem;text-align:center;padding:4.5rem 1.4rem;border-radius:28px;border:1px solid #232323;background:radial-gradient(36rem 16rem at 50% 0%,rgba(124,92,255,.28),transparent 70%),#050505}
-.final h2{font:600 clamp(2.2rem,6vw,4rem)/1.05 var(--serif);margin:0 0 1.6rem}
+.final{margin-top:7rem;text-align:center;padding:5rem 1.4rem;border-radius:30px;border:1px solid #2a2a2a;background:linear-gradient(135deg,rgba(124,92,255,.4),rgba(255,79,163,.3) 55%,rgba(255,204,102,.28)),#050505;background-size:200% 200%;animation:flow 14s ease infinite}
+.final h2{font:600 clamp(2.2rem,6vw,4.2rem)/1.05 var(--serif);margin:0 0 1.8rem}
 
-/* Réponses */
-.qa{display:grid;grid-template-columns:3.4rem 1fr;gap:0 1.2rem;padding:2.2rem 0;border-top:1px solid var(--ligne);max-width:50rem}
-.qa:last-of-type{border-bottom:1px solid var(--ligne)}
-.qa .n{font:600 1.2rem var(--serif);color:var(--k,var(--acc));padding-top:.35rem}
-.qa h2{font:600 clamp(1.5rem,3.4vw,2.2rem)/1.2 var(--serif);margin:0 0 .9rem}
-.qa p{margin:0 0 1.2rem;color:#d0d0d0;font-size:1.08rem;line-height:1.8}
-.qa .act{display:flex;flex-wrap:wrap;align-items:center;gap:1rem}
-.mini{background:transparent;color:var(--txt);border:1px solid #333;padding:.55rem 1.1rem;font-size:.9rem;border-radius:12px}
-.mini:hover{color:#000}
+/* Thème : liste de questions */
+.qs{max-width:50rem}
+.qs a{display:grid;grid-template-columns:3rem 1fr auto;gap:.4rem 1rem;align-items:baseline;padding:1.5rem .4rem;border-top:1px solid var(--ligne);text-decoration:none;transition:.3s}
+.qs a:last-of-type{border-bottom:1px solid var(--ligne)}
+.qs a:hover{padding-left:1.1rem;background:linear-gradient(90deg,color-mix(in srgb,var(--k) 12%,transparent),transparent)}
+.qs .n{font:600 1.1rem var(--serif);color:var(--k)}
+.qs .t{font:500 clamp(1.35rem,3vw,1.9rem)/1.25 var(--serif)}
+.qs .go{color:var(--k);font-size:.9rem;white-space:nowrap}
 .ok{font-size:.82rem;color:#7ee2a8}
-.reponse-box{max-width:46rem;margin:0 0 1rem;padding:1.5rem 1.7rem;border-left:3px solid var(--k,var(--acc));background:#070707;border-radius:0 16px 16px 0}
-.reponse-box b{display:block;font:500 .78rem var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--k,var(--acc));margin-bottom:.6rem}
-.reponse-box p{margin:0;font:500 1.25rem/1.7 var(--serif);color:#e6e6e6}
-.sous-titre{font:600 1.8rem var(--serif);margin:2.6rem 0 0}
 
 /* Espace d'écriture */
-form{max-width:46rem}
-.feuille{margin-top:1.2rem;background:#050505;border:1px solid #242424;border-radius:20px;transition:.3s}
-.feuille:focus-within{border-color:rgba(184,166,255,.75);box-shadow:0 0 0 4px rgba(184,166,255,.1),0 40px 90px -40px rgba(124,92,255,.6)}
-.feuille textarea{display:block;width:100%;min-height:min(58vh,26rem);background:transparent;color:var(--txt);border:0;resize:vertical;padding:1.7rem 1.7rem 1rem;font:400 clamp(1.15rem,2.6vw,1.4rem)/1.85 var(--serif);caret-color:var(--acc)}
+.ecrire{max-width:46rem}
+.feuille{--lh:2.15rem;margin-top:1.6rem;background:linear-gradient(180deg,#070707,#040404);border:1px solid #262626;border-radius:22px;overflow:hidden;transition:.4s}
+.feuille:focus-within{border-color:var(--k);box-shadow:0 0 0 4px color-mix(in srgb,var(--k) 14%,transparent),0 50px 100px -40px var(--k)}
+.feuille.envoye{animation:eclat 1.4s ease}
+@keyframes eclat{40%{box-shadow:0 0 0 6px color-mix(in srgb,var(--k) 35%,transparent),0 0 90px -10px var(--k)}}
+.jauge{height:3px;background:#151515}
+.jauge i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--k),#fff);transition:width .5s}
+.feuille textarea{display:block;width:100%;min-height:min(52vh,24rem);background-color:transparent;color:var(--txt);border:0;resize:none;padding:1.6rem 1.7rem;font:400 clamp(1.2rem,2.7vw,1.45rem)/var(--lh) var(--serif);caret-color:var(--k);
+background-image:repeating-linear-gradient(transparent 0,transparent calc(var(--lh) - 1px),rgba(255,255,255,.055) calc(var(--lh) - 1px),rgba(255,255,255,.055) var(--lh));background-origin:content-box;background-attachment:local}
 .feuille textarea:focus{outline:none}
 .feuille textarea::placeholder{color:#555;font-style:italic}
-.pied-feuille{display:flex;justify-content:space-between;gap:1rem;padding:.7rem 1.4rem;border-top:1px solid #161616;font-size:.82rem;color:#6d6d6d}
-.amorces{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin:1.1rem 0 0;font-size:.88rem;color:var(--mut)}
-.amorce{background:transparent;color:var(--mut);border:1px solid #2a2a2a;border-radius:999px;padding:.35rem .85rem;font:500 .85rem var(--sans);cursor:pointer;transition:.2s}
-.amorce:hover{color:var(--txt);border-color:var(--acc)}
+.pied-feuille{display:flex;justify-content:space-between;gap:1rem;padding:.8rem 1.4rem;border-top:1px solid #161616;font-size:.85rem;color:#6d6d6d}
+#encour{color:var(--k);transition:.3s}
+.amorces{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin:1.2rem 0 0;font-size:.88rem;color:var(--mut)}
+.amorce,.zenbtn{background:transparent;color:var(--mut);border:1px solid #2a2a2a;border-radius:999px;padding:.4rem .9rem;font:500 .85rem var(--sans);cursor:pointer;transition:.2s}
+.amorce:hover,.zenbtn:hover{color:var(--txt);border-color:var(--k)}
 .signe{margin:1.5rem 0 0}
 .signe summary{cursor:pointer;color:var(--mut);font-size:.92rem;width:max-content}.signe summary:hover{color:var(--txt)}
 .deux{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem}
 label{display:block;font:600 .82rem var(--sans);margin:0 0 .4rem;color:var(--mut)}
 input[type=text],input[type=email]{width:100%;background:#060606;color:var(--txt);border:1px solid #262626;border-radius:12px;padding:.8rem 1rem;font:400 1rem var(--sans);transition:.2s}
-input:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px rgba(184,166,255,.16)}
+input:focus{outline:none;border-color:var(--k,var(--acc));box-shadow:0 0 0 3px rgba(184,166,255,.16)}
 .piege{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
-.envoyer{margin-top:1.8rem;display:inline-flex;align-items:center;gap:.6rem;background:var(--txt);color:#000;border:0;border-radius:14px;padding:1rem 1.9rem;font:600 1rem var(--sans);cursor:pointer;transition:.25s}
-.envoyer:hover{background:var(--acc);transform:translateY(-2px)}
+.envoyer{margin-top:1.8rem;display:inline-flex;align-items:center;gap:.6rem;background:var(--k);color:#000;border:0;border-radius:14px;padding:1rem 2rem;font:600 1.02rem var(--sans);cursor:pointer;transition:.25s}
+.envoyer:hover{transform:translateY(-2px);box-shadow:0 18px 44px -14px var(--k)}
 .envoyer:disabled{opacity:.5;cursor:wait;transform:none}
-.etat{min-height:1.6rem;margin:1rem 0 0;font-size:.98rem}
+.etat{min-height:1.6rem;margin:1rem 0 0;font-size:1rem}
 .etat.ok{color:#7ee2a8}.etat.err{color:#ff8a8a}
 .note{margin-top:1.4rem;font-size:.85rem;color:#6d6d6d}
 .suite{display:flex;flex-wrap:wrap;gap:1.4rem;margin-top:2rem;font-size:.95rem}
-.suite a{color:var(--acc);text-decoration:none}.suite a:hover{text-decoration:underline}
-footer{position:relative;z-index:1;text-align:center;padding:3rem 1rem 3.5rem;border-top:1px solid var(--ligne);color:#6d6d6d;font-size:.92rem}
+.suite a,.suite button{color:var(--k);text-decoration:none;background:none;border:0;font:inherit;cursor:pointer;padding:0}
+.suite a:hover,.suite button:hover{text-decoration:underline}
+body.zen .btn-menu,body.zen .recherche,body.zen footer,body.zen .fil,body.zen .hors-zen{display:none}
+body.zen .zenbtn{position:fixed;top:1rem;right:1rem;z-index:70;background:#0a0a0a}
+body.zen main{padding-top:4rem}
+footer{position:relative;z-index:1;text-align:center;padding:3.5rem 1rem 4rem;border-top:1px solid var(--ligne);color:#8a8a8a;font-size:.92rem;background:linear-gradient(180deg,transparent,rgba(124,92,255,.08))}
 footer a{color:var(--mut);text-decoration:none}footer a:hover{color:var(--acc)}
 
-@media(max-width:640px){.deux{grid-template-columns:1fr}.btn-menu span.mot{display:none}.btn-menu{padding:0 .9rem}.qa{grid-template-columns:1fr}.qa .n{padding:0 0 .3rem}.sec{margin-top:4.5rem}}
+@media(max-width:640px){.deux{grid-template-columns:1fr}.btn-menu span.mot{display:none}.btn-menu{padding:0 .9rem}.sec{margin-top:4.5rem}.qs a{grid-template-columns:2.4rem 1fr}.qs .go{display:none}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}.rv{opacity:1;transform:none}}
 </style>
 </head>
@@ -175,88 +186,75 @@ footer a{color:var(--mut);text-decoration:none}footer a:hover{color:var(--acc)}
   <span class="barres" aria-hidden="true"><i></i><i></i><i></i></span><span class="mot">Menu</span>
 </button>
 <div class="voile" id="voile"></div>
-<aside class="tiroir" id="tiroir" aria-label="Thèmes philosophiques">
-  <div class="tiroir-haut"><strong>Thèmes</strong><button class="fermer" id="fermer" aria-label="Fermer le menu">✕</button></div>
+<aside class="tiroir" id="tiroir" aria-label="Les thèmes philosophiques">
+  <div class="tiroir-haut"><strong>Les 20 thèmes</strong><button class="fermer" id="fermer" aria-label="Fermer le menu">✕</button></div>
   <a class="accueil" href="#">← Accueil</a>
+  <input type="search" id="filtre" placeholder="Filtrer les thèmes…" aria-label="Filtrer les thèmes" autocomplete="off">
   <nav id="navThemes"></nav>
 </aside>
 
 <main id="scene"></main>
-<footer><p>Un essai ouvert, écrit avec humilité et curiosité.</p><p><a href="#">Accueil</a> · <a href="#biblio">Bibliothèque de philosophes</a></p></footer>
+<footer><p>Un espace ouvert pour penser et écrire, avec humilité et curiosité.</p><p><a href="#">Accueil</a> · <a href="#biblio">Bibliothèque de philosophes</a></p></footer>
 
 <script>
 (function(){
-  var ENDPOINT = "https://formsubmit.co/ajax/tabomar2007@gmail.com";
-  var C = ["#b8a6ff","#ff8fc7","#ffcc66","#5ee0ff"];
+  /* Enregistrement des réponses dans la base de l'artefact */
+  function envoyer(d){
+    if(!window.claude || !claude.use) return Promise.reject(new Error("indispo"));
+    return Promise.all([claude.use("db"), claude.use("user")]).then(function(r){
+      var db = r[0], user = r[1];
+      if(!db || !user) throw new Error("indispo");
+      return Promise.resolve(user.id()).then(function(id){ return db.collection("reponses/" + id + "/envois").add(d); });
+    });
+  }
 
+  /* 20 thèmes : [nom, description, [5 questions]] */
   var T = [
-  {n:"La conscience", d:"Ce que signifie sentir, penser et être soi.", s:[
-    {n:"L’esprit et le corps", q:[
-      ["Mon esprit est-il identique à mon cerveau ?","Pas forcément identique, mais inséparable. Sans cerveau, plus de pensée ; pourtant décrire des neurones n’explique pas ce que cela fait de ressentir une douleur. L’esprit est sans doute ce que le cerveau vit de l’intérieur."],
-      ["Un robot pourrait-il un jour être vraiment conscient ?","Peut-être, si la conscience dépend de l’organisation de l’information et non de la chair. Mais rien ne le prouve : imiter des paroles n’est pas ressentir. Tant que nous ignorons ce qui crée l’expérience en nous, nous ne pouvons pas trancher."],
-      ["Pourquoi ressentons-nous des émotions plutôt que de simplement réagir ?","Parce que ressentir donne une valeur aux choses : la peur dit « fuis », la joie dit « reste ». Une émotion est une réaction accompagnée d’un sens vécu, ce qui nous permet de choisir plutôt que de subir."],
-      ["Les animaux ont-ils une conscience comparable à la nôtre ?","Beaucoup d’animaux ressentent la douleur, la peur et le plaisir, ce qui suffit à leur donner une forme de conscience. Il leur manque peut-être notre langage réfléchi, pas la vie intérieure."],
-      ["Que se passe-t-il dans notre conscience quand nous dormons ou rêvons ?","Elle ne s’éteint pas toujours : le rêve est une conscience sans contrôle, où les images surgissent sans que nous les choisissions. Le sommeil profond montre, lui, qu’elle peut s’interrompre puis revenir."]]},
-    {n:"Le moi et l’identité", q:[
-      ["Suis-je la même personne qu’il y a dix ans ?","En grande partie non, et pourtant oui. Le corps, les idées et les goûts changent, mais un fil de souvenirs et de valeurs relie les âges. Je suis moins une chose fixe qu’une histoire qui continue."],
-      ["Qu’est-ce qui fait de moi quelqu’un d’unique ?","Ni mes qualités prises une à une, ni mon corps, mais la combinaison de mon histoire, de mes choix et de mon regard. Personne d’autre n’a vécu exactement ce chemin."],
-      ["Le regard des autres façonne-t-il qui je suis ?","Oui, en partie : nous apprenons à nous voir à travers les yeux des autres. Mais nous pouvons aussi leur répondre, les contredire et devenir autre chose que l’image qu’ils nous renvoient."],
-      ["Peut-on se connaître vraiment soi-même ?","Jamais complètement : nos motifs profonds nous échappent souvent. Mais se connaître est un chemin plus qu’un but, et chaque épreuve traversée avec honnêteté nous en rapproche."],
-      ["Si je perdais tous mes souvenirs, serais-je encore moi ?","Je ne serais plus le même narrateur, mais quelque chose resterait : mon caractère, ma sensibilité, ma manière d’aimer. L’identité tient à la mémoire sans s’y réduire."]]}]},
-  {n:"L’existence", d:"Le sens de la vie, la mort et le temps qui passe.", s:[
-    {n:"Le sens de la vie", q:[
-      ["La vie a-t-elle un sens, ou devons-nous le créer ?","Rien ne prouve qu’un sens nous attende tout fait. Mais nous pouvons en construire un par nos engagements, nos liens et nos œuvres. Le sens n’est pas trouvé : il est vécu."],
-      ["Le bonheur est-il le but de l’existence ?","C’est un but naturel, mais pas le seul. Un bonheur poursuivi à tout prix s’échappe ; il vient plutôt par surcroît, quand on vit pour quelque chose qui compte."],
-      ["Faut-il souffrir pour grandir ?","La souffrance n’est pas nécessaire, mais elle peut éveiller. Ce qui fait grandir, ce n’est pas la douleur elle-même, c’est ce que nous apprenons en la traversant."],
-      ["Qu’est-ce qui donne de la valeur à une vie ?","La qualité de nos relations, la sincérité de nos actes et ce que nous laissons aux autres. Une vie vaut moins par sa durée ou son éclat que par la présence qu’elle a mise dans le monde."],
-      ["Vaut-il mieux vivre intensément ou vivre longtemps ?","L’intensité sans durée est fragile, la durée sans intensité est fade. Le mieux est sans doute de vivre pleinement chaque jour : c’est cela qui donne de la richesse au temps."]]},
-    {n:"La mort et le temps", q:[
-      ["Faut-il avoir peur de la mort ?","Épicure disait que la mort n’est rien pour nous : quand elle est là, nous n’y sommes plus. La peur vient surtout de l’inconnu et de la perte. La comprendre apaise, sans tout effacer."],
-      ["La mort donne-t-elle un sens à la vie ?","Elle donne du prix au temps : parce que tout est limité, chaque instant compte. Sans fin, nous pourrions tout remettre à demain."],
-      ["Le temps existe-t-il vraiment, ou n’est-il qu’une impression de notre esprit ?","La physique mesure le temps, mais c’est notre conscience qui le vit comme un passé, un présent et un futur. Il est sans doute à la fois dans le monde et dans notre manière de le ressentir."],
-      ["Que reste-t-il de nous quand nous disparaissons ?","Nos actes, nos paroles, les souvenirs de ceux qui nous ont aimés. Nous continuons dans ce que nous avons transmis, même si notre conscience s’éteint."],
-      ["Vivrions-nous mieux si nous étions immortels ?","Probablement pas : sans fin, le courage, l’urgence et l’amour perdraient de leur force. L’immortalité risquerait de devenir un ennui sans issue."]]}]},
-  {n:"La liberté et la morale", d:"Nos choix, nos responsabilités, le bien et le mal.", s:[
-    {n:"Le libre arbitre", q:[
-      ["Sommes-nous vraiment libres de nos choix ?","Nous sommes influencés par notre histoire et notre corps, mais pas contraints à chaque instant. La liberté, c’est pouvoir réfléchir à nos désirs avant d’agir."],
-      ["Peut-on être responsable de ce que l’on n’a pas choisi d’être ?","Nous ne choisissons ni notre naissance ni nos premiers traits, mais nous répondons de ce que nous en faisons. La responsabilité commence là où nous pouvons agir autrement."],
-      ["Être libre, est-ce faire tout ce que l’on veut ?","Non : suivre chaque envie, c’est parfois être esclave de ses impulsions. Être libre, c’est choisir selon sa raison et ses valeurs, en respectant la liberté des autres."],
-      ["Notre éducation décide-t-elle de nos choix à notre place ?","Elle nous donne nos premières idées et nos habitudes, mais elle ne décide pas de tout. En prenant conscience de nos héritages, nous pouvons les garder ou les refuser."],
-      ["Un monde où tout serait prévisible serait-il un monde sans liberté ?","Pas nécessairement : être prévisible n’est pas être contraint. Un sage agit de façon cohérente et reste libre. Ce qui menace la liberté, c’est l’absence d’alternatives réelles."]]},
-    {n:"Le bien et le mal", q:[
-      ["Le bien et le mal existent-ils indépendamment des cultures ?","Les coutumes varient, mais certaines valeurs reviennent partout : ne pas faire souffrir sans raison, tenir sa parole, protéger les siens. Cela suggère un socle commun sous la diversité."],
-      ["Le mensonge est-il parfois justifié ?","Parfois, pour protéger une vie ou une personne vulnérable. Mais le mensonge abîme la confiance, qui est précieuse. Il doit rester une exception assumée, jamais une habitude."],
-      ["Peut-on faire le mal en croyant faire le bien ?","Oui, et c’est fréquent : une intention sincère ne protège pas de l’erreur. D’où l’importance de douter, d’écouter les autres et de mesurer les conséquences."],
-      ["Faut-il juger une action sur ses intentions ou sur ses conséquences ?","Les deux comptent. Les intentions révèlent le caractère, les conséquences touchent réellement les autres. Une bonne morale regarde ce que l’on veut et ce que l’on provoque."],
-      ["Pourquoi devrions-nous être justes quand personne ne nous voit ?","Parce que nous vivons avec nous-mêmes. Agir injustement en secret nous change et nous éloigne de la personne que nous voulons être. La justice est aussi une fidélité à soi."]]}]},
-  {n:"La connaissance", d:"Ce que nous pouvons savoir, croire et comprendre.", s:[
-    {n:"Vérité et réalité", q:[
-      ["Existe-t-il une vérité absolue ?","Certaines vérités ne dépendent pas de nous : deux et deux font quatre, la Terre tourne. D’autres, comme le beau ou le juste, sont plus débattues. Chercher la vérité reste une exigence, même si nous ne l’atteignons qu’en partie."],
-      ["Peut-on être certain que le monde est tel que nous le percevons ?","Non : nous ne percevons que ce que nos sens et notre cerveau nous montrent. Mais la science corrige nos illusions en comparant les points de vue. Nous atteignons le monde indirectement, et pourtant sérieusement."],
-      ["Nos sens nous trompent-ils plus qu’ils ne nous renseignent ?","Ils nous trompent parfois, mais ils nous renseignent bien plus souvent : sans eux, aucune connaissance. Les illusions sont des exceptions, que nous repérons justement grâce à d’autres sens et à la raison."],
-      ["Une vérité douloureuse vaut-elle mieux qu’un mensonge réconfortant ?","Le plus souvent oui : un réconfort fondé sur un mensonge s’effondre et laisse plus seul. Mais la vérité se dit avec tact et en son temps, car la franchise n’exclut pas la douceur."],
-      ["La science peut-elle tout expliquer ?","Elle explique remarquablement comment le monde fonctionne. Elle laisse ouvertes d’autres questions : pourquoi il y a quelque chose, ce qui est juste, ce que cela fait de ressentir. Ce sont les terrains de la philosophie."]]},
-    {n:"Raison et croyance", q:[
-      ["Peut-on croire sans preuve ?","On le fait tout le temps : croire en un ami, en l’avenir, en un sens. Ces croyances ne sont pas absurdes si elles ne contredisent pas les faits et restent ouvertes à la révision."],
-      ["La raison suffit-elle pour bien vivre ?","Elle est indispensable, mais pas suffisante. Nous avons aussi besoin d’émotions, de relations et de confiance. Pascal disait que le cœur a ses raisons que la raison ne connaît point."],
-      ["Doute-t-on trop ou pas assez aujourd’hui ?","Souvent mal : on doute de ce qui dérange et l’on croit ce qui plaît. Le bon doute est méthodique : il examine les preuves avec la même exigence pour tous."],
-      ["Les émotions sont-elles un obstacle à la pensée juste ?","Elles peuvent déformer le jugement, mais sans elles nous ne saurions pas ce qui compte. Une pensée juste ne supprime pas les émotions : elle les écoute et les examine."],
-      ["Que signifie vraiment « comprendre » quelque chose ?","Comprendre, c’est voir pourquoi une chose est ainsi, pas seulement la connaître. C’est la relier à d’autres idées, pouvoir l’expliquer à quelqu’un et l’appliquer dans un cas nouveau."]]}]}
+  ["La conscience","Sentir, penser, être soi.",["Mon esprit est-il identique à mon cerveau ?","Un robot pourrait-il un jour être vraiment conscient ?","Les animaux ont-ils une conscience comparable à la nôtre ?","Que se passe-t-il en nous quand nous rêvons ?","Peut-on être conscient sans le savoir ?"]],
+  ["L’identité","Qui suis-je, au fond ?",["Suis-je la même personne qu’il y a dix ans ?","Qu’est-ce qui fait de moi quelqu’un d’unique ?","Le regard des autres façonne-t-il qui je suis ?","Si je perdais tous mes souvenirs, serais-je encore moi ?","Peut-on vraiment changer de personnalité ?"]],
+  ["Le sens de la vie","Pourquoi tout cela ?",["La vie a-t-elle un sens, ou devons-nous le créer ?","Qu’est-ce qui donne de la valeur à une vie ?","Faut-il avoir un but pour être heureux ?","Vaut-il mieux vivre intensément ou vivre longtemps ?","Qu’aimerais-tu qu’on retienne de toi ?"]],
+  ["Le bonheur","Ce que nous cherchons tous.",["Le bonheur est-il un choix ?","Peut-on être heureux sans les autres ?","L’argent fait-il le bonheur ?","Faut-il avoir connu la peine pour apprécier la joie ?","Un bonheur simple vaut-il mieux qu’un grand destin ?"]],
+  ["La mort","La seule certitude.",["Faut-il avoir peur de la mort ?","La mort donne-t-elle un sens à la vie ?","Vivrions-nous mieux si nous étions immortels ?","Que reste-t-il de nous quand nous disparaissons ?","Parle-t-on assez de la mort dans nos sociétés ?"]],
+  ["Le temps","Passé, présent, avenir.",["Le temps existe-t-il vraiment ?","Pourquoi le temps semble-t-il passer plus vite avec l’âge ?","Faut-il vivre dans le présent ?","Peut-on changer son passé ?","Le futur est-il déjà écrit ?"]],
+  ["La liberté","Choisir, vraiment ?",["Sommes-nous vraiment libres de nos choix ?","Être libre, est-ce faire tout ce que l’on veut ?","Notre éducation décide-t-elle à notre place ?","Peut-on être libre en société ?","La liberté fait-elle peur ?"]],
+  ["Le bien et le mal","Où passe la frontière ?",["Le bien et le mal sont-ils les mêmes partout ?","Le mensonge est-il parfois justifié ?","Peut-on faire le mal en croyant faire le bien ?","Faut-il juger les actes ou les intentions ?","Pourquoi être juste quand personne ne nous voit ?"]],
+  ["La vérité","Peut-on la saisir ?",["Existe-t-il une vérité absolue ?","Une vérité douloureuse vaut-elle mieux qu’un mensonge réconfortant ?","Peut-on être certain que le monde est tel que nous le percevons ?","Comment distinguer le vrai du faux aujourd’hui ?","Pourquoi tenons-nous tant à nos opinions ?"]],
+  ["La connaissance","Savoir, comprendre.",["Que signifie vraiment « comprendre » ?","La science peut-elle tout expliquer ?","Peut-on tout apprendre par soi-même ?","Savoir plus rend-il plus heureux ?","Qu’est-ce que nous ne saurons jamais ?"]],
+  ["Raison et croyance","Penser ou croire ?",["Peut-on croire sans preuve ?","La raison suffit-elle pour bien vivre ?","Doute-t-on trop ou pas assez ?","La foi et la raison peuvent-elles s’entendre ?","Les émotions sont-elles un obstacle à la pensée juste ?"]],
+  ["L’amour","Aimer, être aimé.",["Aime-t-on une personne ou l’idée qu’on s’en fait ?","L’amour peut-il durer toujours ?","Peut-on aimer sans posséder ?","Faut-il s’aimer soi-même pour aimer les autres ?","L’amour rend-il libre ou dépendant ?"]],
+  ["L’amitié","Ces liens que l’on choisit.",["Qu’est-ce qu’un véritable ami ?","L’amitié peut-elle survivre à la distance ?","Peut-on être ami avec quelqu’un qui pense l’inverse de nous ?","Doit-on tout pardonner à un ami ?","Les réseaux sociaux ont-ils changé l’amitié ?"]],
+  ["La justice","Ce que nous nous devons.",["Qu’est-ce qu’une société juste ?","Faut-il punir ou réparer ?","L’égalité est-elle compatible avec la liberté ?","Est-il juste de désobéir à une loi injuste ?","Peut-on être juste envers tout le monde ?"]],
+  ["Le pouvoir","Vivre ensemble.",["Pourquoi obéissons-nous ?","Le pouvoir corrompt-il ?","La démocratie est-elle le moins mauvais des régimes ?","Faut-il séparer la morale et la politique ?","Qu’est-ce qu’un bon citoyen ?"]],
+  ["Le travail","Gagner sa vie, ou la perdre ?",["Le travail est-il nécessaire pour s’épanouir ?","Faut-il aimer son travail ?","Que perdrions-nous si les machines faisaient tout ?","Réussir sa vie, est-ce réussir sa carrière ?","A-t-on le droit à la paresse ?"]],
+  ["L’art et la beauté","Ce qui nous touche.",["Le beau est-il objectif ?","À quoi sert l’art ?","Peut-on tout dire en art ?","Pourquoi la musique nous émeut-elle ?","Qu’est-ce qui fait qu’une œuvre est « grande » ?"]],
+  ["La technologie","Outils et vertige.",["Les technologies nous rendent-elles plus libres ?","Une intelligence artificielle peut-elle penser ?","Vivre connecté, est-ce encore vivre présent ?","Faut-il faire tout ce que la technique permet ?","Que perdons-nous en déléguant à la machine ?"]],
+  ["La nature","Notre place sur Terre.",["L’homme est-il au-dessus de la nature ?","Avons-nous des devoirs envers les animaux ?","Faut-il protéger la nature pour elle-même ou pour nous ?","Qu’est-ce qui rend un lieu sauvage précieux ?","Les générations futures ont-elles des droits ?"]],
+  ["L’épreuve","Ce qui nous brise ou nous forge.",["Faut-il souffrir pour grandir ?","Pourquoi le mal existe-t-il ?","Peut-on tirer du sens d’une épreuve ?","Doit-on toujours se montrer fort ?","Que devons-nous à ceux qui souffrent ?"]]
   ];
-  var AMORCES = ["Je crois que…", "Au fond…", "Un exemple qui m’a marqué :", "Je ne suis pas d’accord, parce que…"];
+  var AMORCES = ["Je crois que…","Au fond…","Un exemple qui m’a marqué :","Je ne suis pas d’accord, parce que…","Ce que ça change pour moi :","Pour être honnête…"];
+  var PAS = [[0,"La page blanche est ton alliée. Commence par un seul mot."],[1,"C’est lancé. Laisse venir."],[15,"Tu tiens une piste. Continue."],[40,"Il y a déjà une vraie idée ici."],[80,"Belle réflexion. Va jusqu’au bout de ton idée."],[150,"Tu écris comme un philosophe."],[300,"Quelle profondeur ! Prends ton temps."]];
   var NOMS = [["Socrate","socrate"],["Platon","platon"],["Aristote","aristote"],["Épicure","epicure"],["Épictète","epictete"],["Marc Aurèle","marc-aurele"],["Confucius","confucius"],["Averroès","averroes"],["Machiavel","machiavel"],["Montaigne","montaigne"],["Descartes","descartes"],["Pascal","pascal"],["Spinoza","spinoza"],["Rousseau","rousseau"],["Kant","kant"],["Nietzsche","nietzsche"],["Sartre","sartre"],["Beauvoir","beauvoir"],["Camus","camus"],["Chalmers","chalmers"]];
   var CITS = [["Je pense, donc je suis.","Descartes"],["Une vie sans examen ne vaut pas la peine d’être vécue.","Socrate"],["Le cœur a ses raisons que la raison ne connaît point.","Pascal"],["Aie le courage de te servir de ton propre entendement.","Kant"],["Il faut imaginer Sisyphe heureux.","Camus"]];
 
   var scene = document.getElementById("scene"), body = document.body, lueur = document.getElementById("lueur"), rot;
-
+  function hue(i){ return (265 + i * 19) % 360; }
+  function col(i){ return "hsl(" + hue(i) + " 90% 72%)"; }
+  function qid(i, k){ return "t" + i + "-q" + k; }
+  function n2(i){ return (i < 9 ? "0" : "") + (i + 1); }
+  function norm(s){ return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); }
   function lire(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function noter(k, v){ try{ if(v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); }catch(e){} }
-  function n2(i){ return (i < 9 ? "0" : "") + (i + 1); }
 
-  /* Menu */
-  document.getElementById("navThemes").innerHTML = T.map(function(t, i){
-    return '<details><summary>' + t.n + '</summary>' + t.s.map(function(s, j){ return '<a href="#t' + i + '-s' + j + '">' + s.n + '</a>'; }).join("") + '</details>';
+  /* Menu : 20 thèmes, chacun déroule ses 5 questions */
+  var nav = document.getElementById("navThemes");
+  nav.innerHTML = T.map(function(t, i){
+    return '<details data-i="' + i + '" data-n="' + norm(t[0]) + '" style="--k:' + col(i) + '"><summary><span class="pt"></span>' + n2(i) + ' · ' + t[0] + '</summary><a class="tl" href="#t' + i + '">Voir tout le thème →</a>' +
+      t[2].map(function(q, k){ return '<a href="#' + qid(i, k) + '">' + q + '</a>'; }).join("") + '</details>';
   }).join("");
+  document.getElementById("filtre").addEventListener("input", function(){
+    var v = norm(this.value.trim());
+    nav.querySelectorAll("details").forEach(function(d){ d.hidden = !!v && d.getAttribute("data-n").indexOf(v) < 0; });
+  });
   var btn = document.getElementById("btnMenu");
   function menu(ouvre){
     body.classList.toggle("ouvert", ouvre);
@@ -267,86 +265,97 @@ footer a{color:var(--mut);text-decoration:none}footer a:hover{color:var(--acc)}
   btn.addEventListener("click", function(){ menu(!body.classList.contains("ouvert")); });
   document.getElementById("fermer").addEventListener("click", function(){ menu(false); });
   document.getElementById("voile").addEventListener("click", function(){ menu(false); });
-  document.addEventListener("keydown", function(e){ if(e.key === "Escape") menu(false); });
+  document.addEventListener("keydown", function(e){
+    if(e.key !== "Escape") return;
+    menu(false);
+    if(body.classList.contains("zen")){ body.classList.remove("zen"); var z = document.getElementById("zen"); if(z) z.textContent = "Mode concentration"; }
+  });
   document.addEventListener("pointermove", function(e){
     var d = e.target.closest && e.target.closest(".dossier");
     if(!d) return;
     var r = d.getBoundingClientRect();
     d.style.setProperty("--mx", (e.clientX - r.left) + "px"); d.style.setProperty("--my", (e.clientY - r.top) + "px");
   });
+  function defile(){
+    var max = document.documentElement.scrollHeight - innerHeight;
+    lueur.style.setProperty("--p", max > 0 ? Math.min(scrollY / max, 1) : 0);
+  }
+  addEventListener("scroll", defile, {passive:true});
 
-  /* Question du jour */
+  /* Question au hasard (de préférence pas encore traitée) */
+  function hasard(ti){
+    var pool = [], tous = [];
+    T.forEach(function(t, i){
+      if(ti !== undefined && i !== ti) return;
+      t[2].forEach(function(q, k){ tous.push(qid(i, k)); if(!lire("fait:" + qid(i, k))) pool.push(qid(i, k)); });
+    });
+    if(!pool.length) pool = tous;
+    location.hash = "#" + pool[Math.floor(Math.random() * pool.length)];
+  }
+  scene.addEventListener("click", function(e){
+    var h = e.target.closest("[data-hasard]");
+    if(h){ var v = h.getAttribute("data-hasard"); hasard(v === "" ? undefined : +v); return; }
+    var s = e.target.closest("[data-vers]");
+    if(s){ var el = document.getElementById(s.getAttribute("data-vers")); if(el) el.scrollIntoView({behavior:"smooth"}); }
+  });
+
   var plat = [];
-  T.forEach(function(t, i){ t.s.forEach(function(s, j){ s.q.forEach(function(q, k){ plat.push({id:"t"+i+"-s"+j+"-q"+k, q:q[0], a:q[1]}); }); }); });
+  T.forEach(function(t, i){ t[2].forEach(function(q, k){ plat.push({id:qid(i, k), q:q, i:i}); }); });
   var jour = plat[Math.floor(Date.now() / 864e5) % plat.length];
 
   function fil(parts){
     return '<nav class="fil" aria-label="Fil d’Ariane">' + parts.map(function(p){ return p.h ? '<a href="' + p.h + '">' + p.l + '</a>' : '<b>' + p.l + '</b>'; }).join('<span>/</span>') + '</nav>';
   }
-  function nbFaits(i, j){ var c = 0; for(var k = 0; k < 5; k++){ if(lire("fait:t" + i + "-s" + j + "-q" + k)) c++; } return c; }
 
   /* Pages */
   function accueil(){
-    var nd = 0, nq = 0;
-    T.forEach(function(t){ nd += t.s.length; t.s.forEach(function(s){ nq += s.q.length; }); });
+    var nq = 0; T.forEach(function(t){ nq += t[2].length; });
     var liste = NOMS.map(function(x){ return '<a href="#p-' + x[1] + '">' + x[0] + '</a><i>✦</i>'; }).join("");
     return '<div class="vue">' +
       '<section class="hero"><div class="aurore" aria-hidden="true"><i></i><i></i><i></i></div>' +
-      '<span class="etiquette">Un essai de réponses aux questions existentielles</span>' +
+      '<span class="etiquette">Un espace pour penser par écrit</span>' +
       '<h1>Qui sommes-nous<br>quand nous <span class="grad">pensons&nbsp;?</span></h1>' +
-      '<p class="intro">Des réponses sincères aux grandes questions de la vie, et une page noire pour écrire les tiennes.</p>' +
-      '<div class="btns"><a class="cta" href="#t0">Lire les réponses</a><a class="cta vide" href="#' + jour.id + '">Écrire ma réponse</a></div></section>' +
-      '<section class="stats rv">' + [[T.length,"thèmes"],[nd,"dossiers"],[nq,"réponses"],[NOMS.length,"philosophes"]].map(function(x){ return '<div><b>' + x[0] + '</b><span>' + x[1] + '</span></div>'; }).join("") + '</section>' +
-      '<section class="manif rv"><p>Philosopher, ce n’est pas posséder des réponses : c’est <em>apprendre à mieux poser les questions</em>. Ici, chaque question reçoit une réponse honnête, ouverte à la discussion, et toi, tu as toute la place pour la tienne.</p></section>' +
-      '<section class="sec"><h2 class="titre rv">Quatre chemins pour penser</h2><div class="grille">' + T.map(function(t, i){
-        return '<a class="dossier rv" style="--k:' + C[i] + '" href="#t' + i + '"><span class="num">THÈME ' + n2(i) + '</span><h3>' + t.n + '</h3><p>' + t.d + '</p><span class="compte">' + t.s.length + ' dossiers · ' + t.s.length * 5 + ' réponses</span></a>';
+      '<p class="intro">' + T.length + ' thèmes, ' + nq + ' questions, et une page qui n’attend que tes mots. Pas de bonne réponse, pas de limite de longueur : juste toi et la question.</p>' +
+      '<div class="btns"><button class="cta" data-hasard="">Écrire maintenant ✦</button><button class="cta vide" data-vers="themes">Voir les thèmes</button></div></section>' +
+      '<section class="stats rv">' + [[T.length,"thèmes"],[nq,"questions"],["∞","mots autorisés"],[NOMS.length,"philosophes"]].map(function(x){ return '<div><b>' + x[0] + '</b><span>' + x[1] + '</span></div>'; }).join("") + '</section>' +
+      '<section class="manif rv"><p>Philosopher, ce n’est pas posséder des réponses : c’est <em>apprendre à mieux poser les questions</em>. Ici, les questions sont posées. Les réponses, c’est toi qui les écris.</p></section>' +
+      '<section class="sec" id="themes"><h2 class="titre rv">Choisis ce qui te trouble</h2><div class="grille">' + T.map(function(t, i){
+        return '<a class="dossier rv" style="--k:' + col(i) + ';--d:' + ((i % 4) * .07) + 's" href="#t' + i + '"><span class="num">THÈME ' + n2(i) + '</span><h3>' + t[0] + '</h3><p>' + t[1] + '</p><span class="compte">5 questions</span></a>';
       }).join("") + '</div></section>' +
-      '<section class="sec rv"><span class="etiquette">Une question, une réponse</span><div class="jourbox"><h2 class="qh">' + jour.q + '</h2><p>' + jour.a + '</p><a class="cta" href="#' + jour.id + '">Donner mon avis →</a></div></section>' +
+      '<section class="sec rv"><span class="etiquette" style="--k:' + col(jour.i) + '">Question du jour</span><div class="jourbox"><h2 class="qh">' + jour.q + '</h2><div class="btns"><a class="cta" href="#' + jour.id + '">Écrire ma réponse →</a><button class="cta vide" data-hasard="">Une autre au hasard</button></div></div></section>' +
       '<section class="sec rv"><h2 class="titre">Ils ont pensé avant nous</h2><div class="marq"><div class="piste">' + liste + liste + '</div></div><p class="note-c"><a href="#biblio">Explorer la bibliothèque de philosophes →</a></p></section>' +
       '<section class="sec rv"><div class="citrot" id="citrot"></div></section>' +
-      '<section class="sec"><h2 class="titre rv">Comment ça marche</h2><div class="etapes">' + [["01","Lis","Chaque question a sa réponse, courte et claire."],["02","Réfléchis","Compare avec ton expérience : tu es d’accord, ou pas du tout ?"],["03","Écris","Ta réponse m’est envoyée par email. Écris autant que tu veux."]].map(function(x){
-        return '<div class="etape rv"><b>' + x[0] + '</b><h3>' + x[1] + '</h3><p>' + x[2] + '</p></div>';
+      '<section class="sec"><h2 class="titre rv">Trois gestes, pas plus</h2><div class="etapes">' + [["01","Choisis","Un thème, une question qui te parle."],["02","Écris","Autant que tu veux, sans limite de mots."],["03","Envoie","Ta réponse arrive à l’auteur du site."]].map(function(x, i){
+        return '<div class="etape rv" style="--d:' + i * .1 + 's"><b>' + x[0] + '</b><h3>' + x[1] + '</h3><p>' + x[2] + '</p></div>';
       }).join("") + '</div></section>' +
-      '<section class="final rv"><h2>Prêt à écrire&nbsp;?</h2><a class="cta" href="#' + jour.id + '">Commencer maintenant</a></section></div>';
+      '<section class="final rv"><h2>Ta page t’attend.</h2><button class="cta" data-hasard="">Écrire maintenant ✦</button></section></div>';
   }
   function theme(i){
     var t = T[i];
-    return '<div class="vue" style="--k:' + C[i] + '">' + fil([{l:"Accueil",h:"#"},{l:t.n}]) + '<span class="etiquette">Thème ' + n2(i) + '</span><h1>' + t.n + '</h1><p class="intro">' + t.d + '</p><div class="grille">' +
-      t.s.map(function(s, j){
-        var f = nbFaits(i, j);
-        return '<a class="dossier" href="#t' + i + '-s' + j + '"><span class="num">DOSSIER ' + n2(j) + '</span><h3>' + s.n + '</h3><span class="compte">5 questions · 5 réponses' + (f ? ' · ' + f + ' écrite' + (f > 1 ? 's' : '') : '') + '</span></a>';
-      }).join("") + '</div></div>';
+    return '<div class="vue" style="--k:' + col(i) + '">' + fil([{l:"Accueil",h:"#"},{l:t[0]}]) + '<span class="etiquette">Thème ' + n2(i) + '</span><h1>' + t[0] + '</h1><p class="intro">' + t[1] + ' Choisis une question et écris ce qui te vient.</p>' +
+      '<div class="qs">' + t[2].map(function(q, k){
+        return '<a href="#' + qid(i, k) + '"><span class="n">' + n2(k) + '</span><span class="t">' + q + (lire("fait:" + qid(i, k)) ? ' <span class="ok">✓ écrite</span>' : '') + '</span><span class="go">Écrire →</span></a>';
+      }).join("") + '</div><div class="btns" style="margin-top:2rem"><button class="cta vide" data-hasard="' + i + '">Une question au hasard dans ce thème</button></div></div>';
   }
-  function dossier(i, j){
-    var t = T[i], s = t.s[j];
-    return '<div class="vue" style="--k:' + C[i] + '">' + fil([{l:"Accueil",h:"#"},{l:t.n,h:"#t"+i},{l:s.n}]) + '<span class="etiquette">' + t.n + '</span><h1>' + s.n + '</h1><p class="intro">Cinq questions, cinq réponses. Après chaque lecture, tu peux écrire la tienne.</p>' +
-      s.q.map(function(x, k){
-        var id = "t" + i + "-s" + j + "-q" + k;
-        return '<article class="qa"><span class="n">' + n2(k) + '</span><div><h2>' + x[0] + '</h2><p>' + x[1] + '</p><div class="act"><a class="cta mini" href="#' + id + '">Écrire ma réponse →</a>' + (lire("fait:" + id) ? '<span class="ok">✓ Tu as répondu</span>' : '') + '</div></div></article>';
-      }).join("") + '</div>';
-  }
-  function question(i, j, k){
-    var t = T[i], s = t.s[j], q = s.q[k], base = "#t" + i + "-s" + j;
-    var suiv = k < 4 ? '<a href="' + base + '-q' + (k+1) + '">Question suivante →</a>' : "";
-    return '<div class="vue" style="--k:' + C[i] + '">' + fil([{l:"Accueil",h:"#"},{l:t.n,h:"#t"+i},{l:s.n,h:base},{l:"Question " + (k+1)}]) +
-      '<span class="etiquette">' + t.n + ' · ' + s.n + '</span><h1 class="q">' + q[0] + '</h1>' +
-      '<div class="reponse-box"><b>Ma réponse</b><p>' + q[1] + '</p></div>' +
-      '<h2 class="sous-titre">Et toi, qu’en penses-tu ?</h2>' +
-      '<form id="form" novalidate>' +
-      '<div class="feuille"><textarea id="rep" name="reponse" aria-label="Ta réponse" placeholder="Commence par la première chose qui te vient à l’esprit…" required></textarea>' +
-      '<div class="pied-feuille"><span id="compte">0 mot</span><span id="sauve"></span></div></div>' +
-      '<div class="amorces"><span>Pas d’inspiration ?</span>' + AMORCES.map(function(a){ return '<button type="button" class="amorce">' + a + '</button>'; }).join("") + '</div>' +
-      '<details class="signe"><summary>Signer ma réponse (facultatif)</summary><div class="deux">' +
+  function question(i, k){
+    var t = T[i], q = t[2][k], suiv = k < 4 ? '<a href="#' + qid(i, k + 1) + '">Question suivante →</a>' : '<a href="#t' + i + '">Retour au thème</a>';
+    return '<div class="vue" style="--k:' + col(i) + '">' + fil([{l:"Accueil",h:"#"},{l:t[0],h:"#t" + i},{l:"Question " + (k + 1)}]) +
+      '<span class="etiquette">' + t[0] + ' · question ' + (k + 1) + ' sur 5</span><h1 class="q">' + q + '</h1>' +
+      '<form id="form" class="ecrire" novalidate>' +
+      '<div class="feuille" id="feuille"><div class="jauge"><i id="jauge"></i></div><textarea id="rep" name="reponse" aria-label="Ta réponse" placeholder="Il n’y a pas de bonne réponse. Écris la première chose qui te vient à l’esprit…" required></textarea>' +
+      '<div class="pied-feuille"><span id="encour"></span><span><span id="compte">0 mot</span> · <span id="sauve">&nbsp;</span></span></div></div>' +
+      '<div class="amorces hors-zen"><span>Pas d’inspiration ?</span>' + AMORCES.map(function(a){ return '<button type="button" class="amorce">' + a + '</button>'; }).join("") + '</div>' +
+      '<div class="amorces"><button type="button" class="zenbtn" id="zen">Mode concentration</button></div>' +
+      '<details class="signe hors-zen"><summary>Signer ma réponse (facultatif)</summary><div class="deux">' +
       '<div><label for="prenom">Ton prénom</label><input type="text" id="prenom" name="prenom" autocomplete="given-name"></div>' +
       '<div><label for="mail">Ton email</label><input type="email" id="mail" name="email" autocomplete="email"></div></div></details>' +
       '<input type="text" name="_honey" class="piege" tabindex="-1" autocomplete="off" aria-hidden="true">' +
       '<button class="envoyer" type="submit">Envoyer ma réponse</button>' +
       '<p class="etat" id="etat" role="status"></p>' +
-      '<p class="note">Ta réponse est envoyée par email à l’auteur du site. Ne mets pas d’informations trop personnelles.</p>' +
-      '<div class="suite"><a href="' + base + '">← Toutes les questions du dossier</a>' + suiv + '</div></form></div>';
+      '<p class="note hors-zen">Ta réponse est envoyée à l’auteur du site. Ne mets pas d’informations trop personnelles.</p>' +
+      '<div class="suite hors-zen"><a href="#t' + i + '">← Les questions du thème</a>' + suiv + '<button type="button" data-hasard="' + i + '">Une autre question</button></div></form></div>';
   }
 
-  /* Apparition au défilement et citations qui tournent */
   function revele(){
     var els = scene.querySelectorAll(".rv");
     if(!("IntersectionObserver" in window)){ els.forEach(function(e){ e.classList.add("in"); }); return; }
@@ -365,38 +374,40 @@ footer a{color:var(--mut);text-decoration:none}footer a:hover{color:var(--acc)}
   }
 
   function afficher(){
-    var m = /^#t(\d+)(?:-s(\d+))?(?:-q(\d+))?$/.exec(location.hash), h, i, j, k;
-    clearInterval(rot); lueur.style.setProperty("--e", 0);
+    var m = /^#t(\d+)(?:-q(\d+))?$/.exec(location.hash), h, i, k;
+    clearInterval(rot); body.classList.remove("zen");
+    lueur.style.setProperty("--e", 0); lueur.style.setProperty("--h", 260);
     if(m && T[+m[1]]){
-      i = +m[1];
-      if(m[2] !== undefined && T[i].s[+m[2]]){
-        j = +m[2];
-        if(m[3] !== undefined && T[i].s[j].q[+m[3]]){ k = +m[3]; h = question(i, j, k); }
-        else h = dossier(i, j);
-      } else h = theme(i);
+      i = +m[1]; lueur.style.setProperty("--h", hue(i));
+      if(m[2] !== undefined && T[i][2][+m[2]]){ k = +m[2]; h = question(i, k); } else h = theme(i);
     } else h = accueil();
     scene.innerHTML = h;
     window.scrollTo(0, 0);
-    document.title = k !== undefined ? T[i].s[j].q[k][0] : j !== undefined ? T[i].s[j].n : i !== undefined ? T[i].n : "Qui sommes-nous quand nous pensons ?";
-    revele(); citations();
-    if(k !== undefined) branche(T[i].n, T[i].s[j].n, T[i].s[j].q[k][0], "t" + i + "-s" + j + "-q" + k);
+    document.title = k !== undefined ? T[i][2][k] : i !== undefined ? T[i][0] : "Qui sommes-nous quand nous pensons ?";
+    nav.querySelectorAll("details").forEach(function(d){ d.open = i !== undefined && +d.getAttribute("data-i") === i; });
+    revele(); citations(); defile();
+    if(k !== undefined) branche(i, k);
   }
 
   /* Espace d'écriture */
-  function branche(themeNom, sous, question, id){
-    var f = document.getElementById("form"), etat = document.getElementById("etat"), ta = document.getElementById("rep"),
-        compte = document.getElementById("compte"), sauve = document.getElementById("sauve"), tmr;
+  function branche(i, k){
+    var id = qid(i, k), question = T[i][2][k], f = document.getElementById("form"), etat = document.getElementById("etat"), ta = document.getElementById("rep"),
+        compte = document.getElementById("compte"), sauve = document.getElementById("sauve"), enc = document.getElementById("encour"), jauge = document.getElementById("jauge"), tmr;
     function maj(){
-      var v = ta.value.trim(), mots = v ? v.split(/\s+/).length : 0;
+      var v = ta.value.trim(), mots = v ? v.split(/\s+/).length : 0, msg = PAS[0][1];
+      PAS.forEach(function(p){ if(mots >= p[0]) msg = p[1]; });
       compte.textContent = mots + (mots > 1 ? " mots" : " mot");
+      enc.textContent = msg;
+      jauge.style.width = Math.min(mots / 120, 1) * 100 + "%";
       lueur.style.setProperty("--e", Math.min(mots / 60, 1));
+      ta.style.height = "auto"; ta.style.height = ta.scrollHeight + "px";
     }
     var brouillon = lire("brouillon:" + id);
     if(brouillon){ ta.value = brouillon; sauve.textContent = "Brouillon retrouvé"; }
     maj();
     ta.addEventListener("input", function(){
-      maj(); sauve.textContent = ""; clearTimeout(tmr);
-      tmr = setTimeout(function(){ noter("brouillon:" + id, ta.value.trim() ? ta.value : null); sauve.textContent = ta.value.trim() ? "Brouillon enregistré" : ""; }, 500);
+      maj(); sauve.innerHTML = "&nbsp;"; clearTimeout(tmr);
+      tmr = setTimeout(function(){ noter("brouillon:" + id, ta.value.trim() ? ta.value : null); sauve.textContent = ta.value.trim() ? "Brouillon enregistré" : "\u00a0"; }, 500);
     });
     scene.querySelectorAll(".amorce").forEach(function(b){
       b.addEventListener("click", function(){
@@ -405,28 +416,27 @@ footer a{color:var(--mut);text-decoration:none}footer a:hover{color:var(--acc)}
         ta.focus(); ta.dispatchEvent(new Event("input"));
       });
     });
+    var zb = document.getElementById("zen");
+    zb.addEventListener("click", function(){
+      var on = body.classList.toggle("zen");
+      zb.textContent = on ? "Quitter la concentration ✕" : "Mode concentration";
+      if(on) ta.focus();
+    });
     f.addEventListener("submit", function(e){
       e.preventDefault();
       var rep = ta.value.trim();
       etat.className = "etat";
       if(!rep){ etat.className = "etat err"; etat.textContent = "Écris ta réponse avant de l’envoyer."; ta.focus(); return; }
+      if(f._honey.value) return;
       var b = f.querySelector(".envoyer"); b.disabled = true; etat.textContent = "Envoi en cours…";
-      var data = {
-        _subject: "Réponse philosophique : " + question, _template: "table", _captcha: "false", _honey: f._honey.value,
-        theme: themeNom, sous_theme: sous, question: question, reponse: rep,
-        prenom: f.prenom.value.trim() || "(anonyme)", email: f.email.value.trim() || "(non donné)"
-      };
-      if(f.email.value.trim()) data._replyto = f.email.value.trim();
-      fetch(ENDPOINT, {method:"POST", headers:{"Content-Type":"application/json","Accept":"application/json"}, body:JSON.stringify(data)})
-        .then(function(r){ return r.json(); })
-        .then(function(j){
-          if(j && (j.success === true || j.success === "true")){
-            etat.className = "etat ok"; etat.textContent = "Merci de ta réponse ✦";
-            noter("fait:" + id, "1"); noter("brouillon:" + id, null);
-            ta.value = ""; sauve.textContent = ""; maj();
-          } else { throw new Error("refus"); }
+      envoyer({theme:T[i][0], question:question, reponse:rep, prenom:f.prenom.value.trim() || "(anonyme)", email:f.email.value.trim() || "(non donné)", date:new Date().toISOString()})
+        .then(function(){
+          etat.className = "etat ok"; etat.textContent = "Merci, ta réponse est partie ✦ Tu peux passer à une autre question.";
+          noter("fait:" + id, "1"); noter("brouillon:" + id, null);
+          ta.value = ""; sauve.innerHTML = "&nbsp;"; maj();
+          var fe = document.getElementById("feuille"); fe.classList.remove("envoye"); void fe.offsetWidth; fe.classList.add("envoye");
         })
-        .catch(function(){ etat.className = "etat err"; etat.textContent = "L’envoi a échoué. Ta réponse est toujours dans la case : copie-la, puis réessaie dans un moment."; })
+        .catch(function(){ etat.className = "etat err"; etat.textContent = "L’envoi n’a pas fonctionné. Ta réponse est toujours dans la case : copie-la pour ne pas la perdre, puis réessaie."; })
         .then(function(){ b.disabled = false; });
     });
   }
@@ -437,6 +447,148 @@ footer a{color:var(--mut);text-decoration:none}footer a:hover{color:var(--acc)}
 </script>
 
 <!-- Bibliothèque de philosophes et barre de recherche : doit rester ici, après le script ci-dessus -->
-<script src="bibliotheque.js"></script>
+<script>
+(function(){
+function P(id,nom,dates,ecole,libre,th,bio,oeuvres,cit){return{id:id,nom:nom,dates:dates,ecole:ecole,libre:libre,th:th,bio:bio,oeuvres:oeuvres,cit:cit};}
+
+/* ===== BIBLIOTHÈQUE : pour ajouter un philosophe, copie une ligne P(...) ===== */
+var L=[
+P("socrate","Socrate","v. 470 – 399 av. J.-C.","Grèce antique",true,["connaissance","vertu","morale","vérité","ignorance","dialogue"],"Il interroge ses concitoyens à Athènes pour les aider à examiner leurs certitudes. Il n’a rien écrit : on le connaît surtout par Platon et Xénophon.",["Apologie de Socrate (Platon)","Criton (Platon)","Phédon (Platon)","Mémorables (Xénophon)"],[["Une vie sans examen ne vaut pas la peine d’être vécue.","Platon, Apologie de Socrate"],["Connais-toi toi-même.","Inscription du temple de Delphes, reprise par Socrate"]]),
+P("platon","Platon","v. 428 – 348 av. J.-C.","Grèce antique",true,["connaissance","justice","vérité","âme","politique","amour","beauté"],"Élève de Socrate et fondateur de l’Académie. Ses dialogues explorent la justice, l’âme, l’amour et la connaissance.",["La République","Le Banquet","Phédon","Théétète"],[["L’étonnement est le propre du philosophe.","Théétète"],["La pensée est le dialogue silencieux de l’âme avec elle-même.","Théétète, Sophiste"]]),
+P("aristote","Aristote","384 – 322 av. J.-C.","Grèce antique",true,["bonheur","vertu","politique","connaissance","morale","logique","cité"],"Élève de Platon et précepteur d’Alexandre le Grand. Il fonde la logique et écrit sur l’éthique, la politique, la nature et l’être.",["Éthique à Nicomaque","Politique","Métaphysique","Poétique"],[["L’homme est par nature un animal politique.","Politique, livre I"],["Tous les hommes désirent naturellement savoir.","Métaphysique, livre A"]]),
+P("epicure","Épicure","341 – 270 av. J.-C.","Épicurisme",true,["bonheur","plaisir","mort","peur","amitié","sagesse"],"Il enseigne dans son Jardin à Athènes qu’une vie heureuse repose sur des plaisirs simples, l’amitié et l’absence de crainte.",["Lettre à Ménécée","Lettre à Hérodote","Maximes capitales"],[["La mort n’est rien pour nous.","Lettre à Ménécée"]]),
+P("epictete","Épictète","v. 50 – v. 125","Stoïcisme",true,["liberté","jugement","stoïcisme","émotions","sagesse"],"Ancien esclave devenu maître stoïcien. Il enseigne à distinguer ce qui dépend de nous de ce qui n’en dépend pas.",["Manuel","Entretiens"],[["Ce ne sont pas les choses qui troublent les hommes, mais les jugements qu’ils portent sur les choses.","Manuel, 5"]]),
+P("marc-aurele","Marc Aurèle","121 – 180","Stoïcisme",true,["stoïcisme","mort","temps","devoir","sagesse","pensée"],"Empereur romain et philosophe stoïcien. Il écrit pour lui-même des notes sur la maîtrise de soi et la brièveté de la vie.",["Pensées pour moi-même"],[["L’âme est teinte de la couleur de ses pensées.","Pensées, livre V"]]),
+P("confucius","Confucius","551 – 479 av. J.-C.","Chine antique",true,["morale","éducation","vertu","société","famille","sagesse"],"Penseur chinois pour qui l’harmonie de la société naît de l’éducation, du respect et de la vertu de chacun.",["Entretiens (Analectes)"],[["Ce que tu ne désires pas pour toi-même, ne l’impose pas aux autres.","Entretiens, XV, 24"]]),
+P("averroes","Averroès","1126 – 1198","Philosophie arabe (Al-Andalus)",true,["raison","foi","intellect","religion","connaissance"],"Juge, médecin et philosophe de Cordoue, grand commentateur d’Aristote. Il défend l’accord entre la raison et la foi.",["Discours décisif","L’Incohérence de l’incohérence","Commentaires sur Aristote"],[]),
+P("machiavel","Machiavel","1469 – 1527","Renaissance italienne",true,["pouvoir","politique","guerre","ruse","fortune"],"Diplomate florentin. Il analyse le pouvoir tel qu’il est, et non tel qu’on voudrait qu’il soit.",["Le Prince","Discours sur la première décade de Tite-Live"],[["Il vaut mieux être craint qu’aimé, si l’on ne peut être les deux.","Le Prince, chap. XVII (traduction libre)"]]),
+P("montaigne","Montaigne","1533 – 1592","Renaissance française",true,["doute","mort","sagesse","soi","éducation","tolérance"],"Il invente l’essai en écrivant sur lui-même et sur la diversité des opinions humaines.",["Essais"],[["Que sais-je ?","Essais, II, 12"],["Philosopher, c’est apprendre à mourir.","Essais, I, 20"]]),
+P("descartes","Descartes","1596 – 1650","Rationalisme",true,["conscience","doute","raison","méthode","esprit","corps","vérité"],"Il fait du doute une méthode et de la pensée la première certitude. Il distingue l’esprit et le corps.",["Discours de la méthode","Méditations métaphysiques","Les Passions de l’âme"],[["Je pense, donc je suis.","Discours de la méthode, IV"],["Le bon sens est la chose du monde la mieux partagée.","Discours de la méthode, I"]]),
+P("pascal","Pascal","1623 – 1662","Philosophie classique",true,["foi","raison","divertissement","mort","cœur","pensée"],"Mathématicien et penseur chrétien. Il explore la misère et la grandeur de l’homme.",["Pensées","Les Provinciales"],[["Le cœur a ses raisons que la raison ne connaît point.","Pensées"],["L’homme n’est qu’un roseau, le plus faible de la nature, mais c’est un roseau pensant.","Pensées"]]),
+P("spinoza","Spinoza","1632 – 1677","Rationalisme",true,["liberté","bonheur","passions","Dieu","raison","joie"],"Philosophe d’Amsterdam. Il cherche la liberté et la joie dans la compréhension de la nature et de nos passions.",["Éthique","Traité théologico-politique","Traité politique"],[["Ne pas rire, ne pas pleurer, ne pas détester, mais comprendre.","Traité politique, I, 4"]]),
+P("rousseau","Rousseau","1712 – 1778","Lumières",true,["liberté","société","égalité","éducation","politique","nature"],"Il s’interroge sur ce que la vie en société fait de la liberté et de l’égalité.",["Du contrat social","Discours sur l’origine de l’inégalité","Émile"],[["L’homme est né libre, et partout il est dans les fers.","Du contrat social, I, 1"]]),
+P("kant","Kant","1724 – 1804","Lumières",true,["connaissance","morale","liberté","devoir","raison","Lumières"],"Il cherche les limites de ce que la raison peut connaître et fonde la morale sur le devoir et la liberté.",["Critique de la raison pure","Critique de la raison pratique","Fondements de la métaphysique des mœurs","Qu’est-ce que les Lumières ?"],[["Aie le courage de te servir de ton propre entendement.","Qu’est-ce que les Lumières ?, 1784"]]),
+P("nietzsche","Nietzsche","1844 – 1900","Philosophie moderne",true,["sens de la vie","morale","vérité","volonté","nihilisme","art"],"Il met en question les valeurs héritées et invite chacun à créer sa propre manière de vivre.",["Ainsi parlait Zarathoustra","Le Gai Savoir","Par-delà le bien et le mal","Généalogie de la morale"],[["Ce qui ne me tue pas me rend plus fort.","Crépuscule des idoles"],["Dieu est mort.","Le Gai Savoir, §125"]]),
+P("sartre","Sartre","1905 – 1980","Existentialisme",false,["liberté","existence","responsabilité","autrui","angoisse"],"Il affirme que nous sommes libres et responsables de ce que nous faisons de nous-mêmes.",["L’Être et le Néant","L’existentialisme est un humanisme","Huis clos","La Nausée"],[["L’existence précède l’essence.","L’existentialisme est un humanisme"],["L’enfer, c’est les autres.","Huis clos"]]),
+P("beauvoir","Simone de Beauvoir","1908 – 1986","Existentialisme",false,["liberté","condition féminine","égalité","existence","morale"],"Elle analyse comment la société fabrique la condition des femmes et défend une morale de la liberté.",["Le Deuxième Sexe","Pour une morale de l’ambiguïté","Mémoires d’une jeune fille rangée"],[["On ne naît pas femme : on le devient.","Le Deuxième Sexe"]]),
+P("camus","Albert Camus","1913 – 1960","Philosophie de l’absurde",false,["absurde","sens de la vie","révolte","liberté","mort"],"Il part du constat que le monde n’a pas de sens évident et cherche comment vivre pleinement malgré cela.",["Le Mythe de Sisyphe","L’Étranger","L’Homme révolté","La Peste"],[["Il faut imaginer Sisyphe heureux.","Le Mythe de Sisyphe"]]),
+P("chalmers","David Chalmers","né en 1966","Philosophie de l’esprit",false,["conscience","esprit","expérience","problème difficile","panpsychisme"],"Il a formulé en 1995 le « problème difficile » de la conscience : pourquoi le cerveau s’accompagne-t-il d’expérience vécue ?",["The Conscious Mind","Reality+"],[["Il n’y a rien que nous connaissions plus directement.","Conférence TED, 2014 (traduction libre)"]])
+];
+
+/* ===== Recherche ===== */
+function n(s){return String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");}
+function e(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+var TH=[];
+L.forEach(function(p){
+  p.th.forEach(function(t){if(TH.indexOf(t)<0)TH.push(t);});
+  p.nm=n(p.nom);p.tx=n(p.th.join(" "));p.ou=n(p.oeuvres.join(" "));
+  p.ci=n(p.cit.map(function(c){return c[0]+" "+c[1];}).join(" "));p.re=n(p.ecole+" "+p.dates+" "+p.bio);
+});
+TH.sort(function(a,b){return a.localeCompare(b,"fr");});
+
+function cherche(q){
+  var mots=n(q).split(/\s+/).filter(Boolean);
+  if(!mots.length)return L.slice();
+  var r=[];
+  L.forEach(function(p){
+    var sc=0,ok=true;
+    mots.forEach(function(m){
+      var s=p.nm.indexOf(m)>-1?10:p.tx.indexOf(m)>-1?6:p.ou.indexOf(m)>-1?4:(p.ci.indexOf(m)>-1||p.re.indexOf(m)>-1)?1:0;
+      if(!s)ok=false;sc+=s;
+    });
+    if(ok)r.push({p:p,s:sc});
+  });
+  r.sort(function(a,b){return b.s-a.s||a.p.nom.localeCompare(b.p.nom);});
+  return r.map(function(x){return x.p;});
+}
+
+/* ===== Style ===== */
+var st=document.createElement("style");
+st.textContent=`
+.recherche{position:fixed;top:1rem;left:8.4rem;right:1rem;max-width:30rem;z-index:40}
+.recherche input{width:100%;height:44px;background:#0b0b0b url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='none' stroke='%239a9a9a' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='8' cy='8' r='6'/%3E%3Cpath d='m13 13 4 4'/%3E%3C/svg%3E") no-repeat 14px center;color:#f3f3f3;border:1px solid #333;border-radius:12px;padding:0 1rem 0 2.7rem;font:400 .95rem Inter,system-ui,sans-serif}
+.recherche input:focus{outline:none;border-color:#b8a6ff;box-shadow:0 0 0 3px rgba(184,166,255,.18)}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 2.2rem}
+.chip{background:#0b0b0b;color:#9a9a9a;border:1px solid #2a2a2a;border-radius:999px;padding:.4rem .9rem;font:500 .85rem Inter,system-ui,sans-serif;cursor:pointer;transition:.2s}
+.chip:hover{color:#f3f3f3;border-color:#b8a6ff}
+.phi .eco{margin:0 0 .8rem}
+.phi blockquote{margin:.8rem 0;padding-left:.9rem;border-left:2px solid #b8a6ff;font:italic 500 1.08rem/1.45 var(--serif);color:#e6e6e6}
+.tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.8rem}
+.tags i{font-style:normal;font-size:.75rem;color:#8d8d8d;border:1px solid #2a2a2a;border-radius:999px;padding:.1rem .6rem}
+.cit{margin:0 0 1.2rem;max-width:46rem;padding:1.1rem 1.4rem;background:#0b0b0b;border:1px solid #222;border-left:3px solid #b8a6ff;border-radius:0 14px 14px 0;font:italic 500 1.35rem/1.45 var(--serif)}
+.cit cite{display:block;margin-top:.5rem;font:400 .85rem var(--sans);font-style:normal;color:#8d8d8d}
+.h2{font:600 1.8rem var(--serif);margin:2.4rem 0 1rem}
+.oeuvres{max-width:46rem;padding-left:1.2rem}.oeuvres li{margin:.4rem 0}.oeuvres a{color:#b8a6ff}
+.liens{display:flex;flex-wrap:wrap;gap:.7rem;margin:1.2rem 0}
+.liens a{border:1px solid #333;border-radius:12px;padding:.6rem 1rem;text-decoration:none;color:#f3f3f3;font-size:.95rem;transition:.2s}
+.liens a:hover{border-color:#b8a6ff;color:#b8a6ff}
+@media(max-width:640px){.recherche{left:4.9rem}}`;
+document.head.appendChild(st);
+
+/* ===== Barre de recherche et lien dans le menu ===== */
+var scene=document.getElementById("scene"),Q="",tmr;
+var f=document.createElement("form");
+f.className="recherche";f.setAttribute("role","search");
+f.innerHTML='<input type="search" id="rech" placeholder="Rechercher un thème, un philosophe…" aria-label="Rechercher un thème ou un philosophe" autocomplete="off">';
+document.body.appendChild(f);
+var inp=document.getElementById("rech");
+document.querySelector("#tiroir a.accueil").insertAdjacentHTML("afterend",'<a class="accueil" href="#biblio">Bibliothèque de philosophes</a>');
+function go(q,saisie){
+  Q=q.trim();
+  if(!saisie)inp.value=q;
+  if(location.hash==="#biblio")resultats();else location.hash="#biblio";
+}
+f.onsubmit=function(ev){ev.preventDefault();go(inp.value,true);};
+inp.oninput=function(){clearTimeout(tmr);tmr=setTimeout(function(){go(inp.value,true);},180);};
+
+/* ===== Pages ===== */
+function carte(p,mots){
+  var c=p.cit[0];
+  for(var i=0;i<p.cit.length;i++){
+    if(mots.some(function(m){return n(p.cit[i][0]).indexOf(m)>-1;})){c=p.cit[i];break;}
+  }
+  return '<a class="dossier phi" href="#p-'+p.id+'"><span class="num">'+e(p.dates)+'</span><h3>'+e(p.nom)+'</h3><p class="eco">'+e(p.ecole)+'</p>'+
+    (c?'<blockquote>« '+e(c[0])+' »</blockquote>':'')+
+    '<span class="tags">'+p.th.slice(0,4).map(function(t){return '<i>'+e(t)+'</i>';}).join("")+'</span></a>';
+}
+function resultats(){
+  var mots=n(Q).split(/\s+/).filter(Boolean),R=cherche(Q);
+  scene.innerHTML='<div class="vue"><span class="etiquette">Bibliothèque</span><h1>'+(Q?e(Q):'Les philosophes')+'</h1>'+
+    '<p class="intro">'+(Q?R.length+' résultat'+(R.length>1?'s':'')+'. Tu peux chercher un thème, un philosophe, une œuvre ou un mot d’une citation.':'Cherche un thème, un philosophe, une œuvre ou une citation dans la barre en haut, ou touche un thème ci-dessous.')+'</p>'+
+    '<div class="chips">'+TH.map(function(t){return '<button type="button" class="chip" data-q="'+e(t)+'">'+e(t)+'</button>';}).join("")+'</div>'+
+    (R.length?'<div class="grille">'+R.map(function(p){return carte(p,mots);}).join("")+'</div>':'<p class="intro">Aucun résultat. Essaie un autre mot ou touche un thème de la liste.</p>')+'</div>';
+  scene.querySelectorAll(".chip").forEach(function(b){b.onclick=function(){go(b.getAttribute("data-q"));};});
+  document.title="Bibliothèque · Philosophie";window.scrollTo(0,0);
+}
+function fiche(id){
+  var p=L.filter(function(x){return x.id===id;})[0];
+  if(!p){location.hash="#biblio";return;}
+  var nq=encodeURIComponent(p.nom);
+  var cit=p.cit.length?p.cit.map(function(c){return '<blockquote class="cit">« '+e(c[0])+' »<cite>'+e(c[1])+'</cite></blockquote>';}).join(""):'<p class="intro">Aucune citation vérifiée pour le moment.</p>';
+  var oeu=p.oeuvres.map(function(o){
+    var t=encodeURIComponent(o.replace(/\s*\(.*\)/,""));
+    return '<li>'+(p.libre?'<a href="https://fr.wikisource.org/w/index.php?search='+t+'" target="_blank" rel="noopener">'+e(o)+'</a>':e(o))+'</li>';
+  }).join("");
+  var lib=p.libre?
+    '<div class="liens"><a href="https://fr.wikisource.org/w/index.php?search='+nq+'" target="_blank" rel="noopener">Wikisource</a><a href="https://www.gutenberg.org/ebooks/search/?query='+nq+'" target="_blank" rel="noopener">Projet Gutenberg</a><a href="https://archive.org/search?query='+nq+'" target="_blank" rel="noopener">Internet Archive</a></div><p class="intro">Les textes originaux sont dans le domaine public. Certaines traductions modernes peuvent rester protégées.</p>':
+    '<p class="intro">Ses œuvres sont encore protégées par le droit d’auteur : elles ne sont pas en accès libre. Tu peux les emprunter en bibliothèque.</p>';
+  scene.innerHTML='<div class="vue"><nav class="fil"><a href="#">Accueil</a><span>/</span><a href="#biblio">Bibliothèque</a><span>/</span><b>'+e(p.nom)+'</b></nav>'+
+    '<span class="etiquette">'+e(p.ecole)+' · '+e(p.dates)+'</span><h1>'+e(p.nom)+'</h1><p class="intro">'+e(p.bio)+'</p>'+
+    '<div class="chips">'+p.th.map(function(t){return '<button type="button" class="chip" data-q="'+e(t)+'">'+e(t)+'</button>';}).join("")+'</div>'+
+    '<h2 class="h2">Citations</h2>'+cit+'<h2 class="h2">Ouvrages</h2><ul class="oeuvres">'+oeu+'</ul>'+
+    '<h2 class="h2">Lire gratuitement</h2>'+lib+
+    '<div class="liens"><a href="https://fr.wikipedia.org/w/index.php?search='+nq+'" target="_blank" rel="noopener">En savoir plus sur Wikipédia</a></div></div>';
+  scene.querySelectorAll(".chip").forEach(function(b){b.onclick=function(){go(b.getAttribute("data-q"));};});
+  document.title=p.nom+" · Philosophie";window.scrollTo(0,0);
+}
+function route(){
+  var h=location.hash,m=/^#p-([a-z0-9-]+)$/.exec(h);
+  if(m)fiche(m[1]);else if(h==="#biblio")resultats();
+}
+window.addEventListener("hashchange",route);
+route();
+})();
+
+</script>
 </body>
 </html>
